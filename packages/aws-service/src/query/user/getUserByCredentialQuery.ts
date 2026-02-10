@@ -1,4 +1,4 @@
-import { GetUserByCredentialQuery, succeed, failAsInternalError } from "core";
+import { GetUserByCredentialQuery, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import {
   CognitoIdentityProviderClient,
   GetUserCommand,

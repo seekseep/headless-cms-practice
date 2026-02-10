@@ -12,7 +12,7 @@ import {
   makeListCategoriesUseCase,
   makeListCategoriesByParentIdUseCase,
   makeCreateUploadUrlUseCase,
-} from "core";
+} from "@headless-cms-practice/core";
 
 import {
   createPostCommand,

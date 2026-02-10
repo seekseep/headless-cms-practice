@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "@headless-cms-practice/ui",
   "type": "module",
   "version": "0.0.1",
   "scripts": {

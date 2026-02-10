@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@headless-cms-practice/api",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/dev.ts",
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.9",
-    "aws-service": "file:../aws-service",
-    "core": "file:../core",
+    "@headless-cms-practice/aws-service": "*",
+    "@headless-cms-practice/core": "*",
     "dotenv": "^17.2.4",
     "hono": "^4.11.9"
   }

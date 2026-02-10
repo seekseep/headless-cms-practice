@@ -1,5 +1,5 @@
 {
-  "name": "aws-service",
+  "name": "@headless-cms-practice/aws-service",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -28,7 +28,7 @@
     "@aws-sdk/client-dynamodb": "^3.985.0",
     "@aws-sdk/client-s3": "^3.985.0",
     "@aws-sdk/s3-request-presigner": "^3.985.0",
-    "core": "file:../core",
+    "@headless-cms-practice/core": "*",
     "zod": "^4.3.6"
   },
   "devDependencies": {

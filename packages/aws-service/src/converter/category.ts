@@ -1,5 +1,5 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
-import { Category } from "core";
+import { Category } from "@headless-cms-practice/core";
 
 export function convertCategoryToItem (category: Category): Record<string, AttributeValue> {
   const item: Record<string, AttributeValue> = {

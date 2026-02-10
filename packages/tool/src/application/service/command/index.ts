@@ -1,4 +1,4 @@
-import { makeUpdateUserRoleCommand } from "aws-service";
+import { makeUpdateUserRoleCommand } from "@headless-cms-practice/aws-service";
 import { fromIni } from "@aws-sdk/credential-providers";
 
 const userPoolConfig = {

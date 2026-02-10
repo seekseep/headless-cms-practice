@@ -1,4 +1,4 @@
-import { ListCategoriesByParentIdQuery, succeed, failAsInternalError } from "core";
+import { ListCategoriesByParentIdQuery, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import { QueryCommand } from "@aws-sdk/client-dynamodb";
 import { TableOperationConfiguration } from "@/configuration";
 import { createDynamoDBClient, encodeNextToken, decodeNextToken } from "@/util/dynamodb";

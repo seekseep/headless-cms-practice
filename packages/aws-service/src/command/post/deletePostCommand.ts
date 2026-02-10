@@ -1,4 +1,4 @@
-import { DeletePostCommand, succeed, failAsInternalError } from "core";
+import { DeletePostCommand, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import { DeleteItemCommand } from "@aws-sdk/client-dynamodb";
 import { TableOperationConfiguration } from "@/configuration";
 import { createDynamoDBClient } from "@/util/dynamodb";

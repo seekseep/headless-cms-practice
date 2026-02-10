@@ -1,5 +1,5 @@
 {
-  "name": "tool",
+  "name": "@headless-cms-practice/tool",
   "version": "1.0.0",
   "description": "CLI tool for operating AWS resources",
   "type": "module",
@@ -12,9 +12,9 @@
     "@aws-sdk/client-sts": "^3.985.0",
     "@aws-sdk/credential-providers": "^3.985.0",
     "@inquirer/prompts": "^7.5.3",
-    "aws-service": "file:../aws-service",
+    "@headless-cms-practice/aws-service": "*",
     "commander": "^14.0.3",
-    "core": "file:../core",
+    "@headless-cms-practice/core": "*",
     "dotenv": "^17.2.4"
   },
   "devDependencies": {

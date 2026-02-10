@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createUserExecutor } from "core";
+import { createUserExecutor } from "@headless-cms-practice/core";
 import { authMiddleware, type AuthEnv } from "@/middleware/auth";
 import { handleResult } from "@/util/handleResult";
 import {

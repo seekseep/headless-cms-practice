@@ -1,4 +1,4 @@
-import { UpdateUserRoleCommand, succeed, failAsInternalError } from "core";
+import { UpdateUserRoleCommand, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import {
   AdminListGroupsForUserCommand,
   AdminAddUserToGroupCommand,

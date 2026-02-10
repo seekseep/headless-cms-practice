@@ -1,5 +1,5 @@
 {
-  "name": "core",
+  "name": "@headless-cms-practice/core",
   "version": "1.0.0",
   "description": "",
   "type": "module",

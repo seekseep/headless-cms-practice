@@ -6,7 +6,7 @@ import {
   makeUpdateCategoryCommand,
   makeDeleteCategoryAndChildrenCommand,
   makeCreateUploadUrlCommand,
-} from "aws-service";
+} from "@headless-cms-practice/aws-service";
 
 const tableConfig = { tableName: process.env.TABLE_NAME! };
 const backetConfig = { backetName: process.env.BACKET_NAME! };

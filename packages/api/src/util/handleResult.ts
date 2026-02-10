@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import type { AppResult } from "core";
+import type { AppResult } from "@headless-cms-practice/core";
 
 const statusMap = {
   InternalError: 500,

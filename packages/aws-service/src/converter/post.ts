@@ -1,5 +1,5 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
-import { Post } from "core";
+import { Post } from "@headless-cms-practice/core";
 
 export function convertPostToItem (post: Post): Record<string, AttributeValue> {
   const item: Record<string, AttributeValue> = {

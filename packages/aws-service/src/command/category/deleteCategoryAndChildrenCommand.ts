@@ -1,4 +1,4 @@
-import { DeleteCategoryAndChildrenCommand, succeed, failAsInternalError } from "core";
+import { DeleteCategoryAndChildrenCommand, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import { DeleteItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { TableOperationConfiguration } from "@/configuration";
 import { createDynamoDBClient } from "@/util/dynamodb";

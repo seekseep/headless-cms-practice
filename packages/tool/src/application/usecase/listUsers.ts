@@ -1,4 +1,4 @@
-import { ListUsersQuery, ListUsersQueryResultItem } from "core";
+import { ListUsersQuery, ListUsersQueryResultItem } from "@headless-cms-practice/core";
 
 type MakeListUsersDependencies = {
   listUsersQuery: ListUsersQuery;

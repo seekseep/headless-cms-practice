@@ -6,7 +6,7 @@ import {
   makeListAllCategoriesQuery,
   makeListCategoriesByParentIdQuery,
   makeGetUserByCredentialQuery,
-} from "aws-service";
+} from "@headless-cms-practice/aws-service";
 
 const tableConfig = { tableName: process.env.TABLE_NAME! };
 const userPoolConfig = { userPoolId: process.env.USER_POOL_ID!, region: process.env.AWS_REGION! };

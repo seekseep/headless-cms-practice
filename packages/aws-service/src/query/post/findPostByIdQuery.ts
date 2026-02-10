@@ -1,4 +1,4 @@
-import { FindPostByIdQuery, succeed, failAsInternalError } from "core";
+import { FindPostByIdQuery, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import { GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { TableOperationConfiguration } from "@/configuration";
 import { createDynamoDBClient } from "@/util/dynamodb";

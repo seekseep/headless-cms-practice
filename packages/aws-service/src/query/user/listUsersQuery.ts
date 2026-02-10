@@ -1,4 +1,4 @@
-import { ListUsersQuery, succeed, failAsInternalError } from "core";
+import { ListUsersQuery, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import {
   ListUsersCommand,
   AdminListGroupsForUserCommand,

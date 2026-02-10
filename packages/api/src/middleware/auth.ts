@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import type { User } from "core";
+import type { User } from "@headless-cms-practice/core";
 import { getUserByCredentialQuery } from "@/application/service/query";
 
 export type AuthEnv = {

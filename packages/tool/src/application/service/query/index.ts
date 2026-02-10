@@ -1,4 +1,4 @@
-import { makeListUsersQuery } from "aws-service";
+import { makeListUsersQuery } from "@headless-cms-practice/aws-service";
 import { fromIni } from "@aws-sdk/credential-providers";
 
 const userPoolConfig = {

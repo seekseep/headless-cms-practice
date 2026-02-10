@@ -1,4 +1,4 @@
-import { UpdateCategoryCommand, succeed, failAsInternalError, failAsNotFound } from "core";
+import { UpdateCategoryCommand, succeed, failAsInternalError, failAsNotFound } from "@headless-cms-practice/core";
 import { GetItemCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { TableOperationConfiguration } from "@/configuration";
 import { createDynamoDBClient } from "@/util/dynamodb";

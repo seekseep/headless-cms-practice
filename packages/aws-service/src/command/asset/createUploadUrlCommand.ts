@@ -1,4 +1,4 @@
-import { CreateUploadUrlCommand, succeed, failAsInternalError } from "core";
+import { CreateUploadUrlCommand, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { BacketConfiguration } from "@/configuration";

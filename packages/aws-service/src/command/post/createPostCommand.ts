@@ -1,4 +1,4 @@
-import { CreatePostCommand, Post, succeed, failAsInternalError } from "core";
+import { CreatePostCommand, Post, succeed, failAsInternalError } from "@headless-cms-practice/core";
 import { PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { TableOperationConfiguration } from "@/configuration";
 import { createDynamoDBClient } from "@/util/dynamodb";

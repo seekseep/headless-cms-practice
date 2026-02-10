@@ -1,4 +1,4 @@
-import { UpdateUserRoleCommand, UserRoleType } from "core";
+import { UpdateUserRoleCommand, UserRoleType } from "@headless-cms-practice/core";
 
 type MakeUpdateUserRoleDependencies = {
   updateUserRoleCommand: UpdateUserRoleCommand;
