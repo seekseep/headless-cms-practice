@@ -14,7 +14,8 @@
       "Bash(npx cdk synth:*)",
       "Bash(xargs:*)",
       "Bash(npx tsx:*)",
-      "Bash(git -C /Users/seekseep/Development/github.com/seekseep/headless-cms-practice config --get remote.origin.url)"
+      "Bash(git -C /Users/seekseep/Development/github.com/seekseep/headless-cms-practice config --get remote.origin.url)",
+      "Bash(gh secret set:*)"
     ]
   }
 }
