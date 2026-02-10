@@ -1,0 +1,68 @@
+name: Deploy Admin UI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/admin-ui/**'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-admin-ui
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and Deploy Admin UI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Admin UI dependencies
+        uses: ./.github/actions/setup-node
+        with:
+          working-directory: packages/admin-ui
+
+      # Fetch build-time environment from CloudFormation
+      - name: Get Admin UI build environment
+        uses: ./.github/actions/get-stack-output
+        with:
+          stack-name: AdminUiStack
+          output-key: AdminUiBuildEnvironment
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Build Admin UI
+        working-directory: packages/admin-ui
+        run: npm run build
+
+      # Fetch deploy configuration from CloudFormation
+      - name: Get Admin UI deploy environment
+        uses: ./.github/actions/get-stack-output
+        with:
+          stack-name: AdminUiStack
+          output-key: AdminUiDeployEnvironment
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync packages/admin-ui/dist/ "s3://${S3_BUCKET_NAME}" \
+            --delete \
+            --region "${{ secrets.AWS_REGION }}"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$DISTRIBUTION_ID" \
+            --paths "/*"

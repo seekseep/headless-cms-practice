@@ -1,0 +1,41 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getAllArticles, getAllCategories } from '../../lib/data';
+
+export const getStaticPaths = (async () => {
+  const PAGE_SIZE = 10;
+  const allArticles = await getAllArticles();
+  const totalPages = Math.ceil(allArticles.length / PAGE_SIZE);
+
+  return Array.from({ length: totalPages - 1 }, (_, i) => {
+    const pageNum = i + 2;
+    const start = (pageNum - 1) * PAGE_SIZE;
+    return {
+      params: { page: String(pageNum) },
+      props: {
+        articles: allArticles.slice(start, start + PAGE_SIZE),
+        currentPage: pageNum,
+        totalPages,
+      },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+const { articles, currentPage, totalPages } = Astro.props;
+const categories = await getAllCategories();
+---
+
+<Layout title={`最新記事 - ページ${currentPage}`}>
+  <Header slot="header" />
+  <div class="mx-auto max-w-5xl px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">最新記事 <span class="text-base font-normal text-gray-500">ページ {currentPage}</span></h1>
+    <ArticleList articles={articles} categories={categories} />
+    <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl="/" />
+  </div>
+  <Footer slot="footer" />
+</Layout>

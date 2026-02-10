@@ -1,0 +1,58 @@
+---
+import type { Category } from '../lib/types';
+import { getChildCategories } from '../lib/data';
+
+interface Props {
+  categories: Category[];
+  currentSlug?: string;
+}
+
+const { categories, currentSlug } = Astro.props;
+
+// テンプレート内で await できないため、事前に子カテゴリを取得
+const childrenMap = new Map<string, Category[]>();
+for (const cat of categories) {
+  childrenMap.set(cat.id, await getChildCategories(cat.id));
+}
+---
+
+<div class="flex flex-wrap gap-2">
+  {categories.map((cat) => {
+    const children = childrenMap.get(cat.id) ?? [];
+    const isActive = cat.slug === currentSlug;
+    const hasActiveChild = children.some((c) => c.slug === currentSlug);
+
+    return (
+      <div>
+        <a
+          href={`/categories/${cat.slug}`}
+          class:list={[
+            'inline-block rounded-full px-3 py-1 text-sm border transition-colors',
+            isActive || hasActiveChild
+              ? 'bg-gray-900 text-white border-gray-900'
+              : 'text-gray-600 border-gray-300 hover:border-gray-900 hover:text-gray-900',
+          ]}
+        >
+          {cat.name}
+        </a>
+        {children.length > 0 && (isActive || hasActiveChild) && (
+          <div class="flex gap-1 mt-1 ml-2">
+            {children.map((child) => (
+              <a
+                href={`/categories/${child.slug}`}
+                class:list={[
+                  'inline-block rounded-full px-2 py-0.5 text-xs border transition-colors',
+                  child.slug === currentSlug
+                    ? 'bg-gray-700 text-white border-gray-700'
+                    : 'text-gray-500 border-gray-200 hover:border-gray-700 hover:text-gray-700',
+                ]}
+              >
+                {child.name}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  })}
+</div>

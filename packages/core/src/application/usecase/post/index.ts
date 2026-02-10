@@ -1,0 +1,6 @@
+export * from './createPost'
+export * from './deletePost'
+export * from './getPost'
+export * from './listPosts'
+export * from './listPostsByCategoryId'
+export * from './updatePost'

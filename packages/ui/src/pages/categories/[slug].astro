@@ -1,0 +1,75 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import Pagination from '../../components/Pagination.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import {
+  getAllCategories,
+  getArticlesByCategory,
+  getChildCategories,
+  getCategoryById,
+} from '../../lib/data';
+
+const PAGE_SIZE = 10;
+
+export const getStaticPaths = (async () => {
+  const categories = await getAllCategories();
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}) satisfies GetStaticPaths;
+
+const { category } = Astro.props;
+const allCategories = await getAllCategories();
+const childCategories = await getChildCategories(category.id);
+const articles = await getArticlesByCategory(category.id);
+const totalPages = Math.ceil(articles.length / PAGE_SIZE);
+const pageArticles = articles.slice(0, PAGE_SIZE);
+
+const breadcrumbItems = [];
+if (category.parentId) {
+  const parent = await getCategoryById(category.parentId);
+  if (parent) {
+    breadcrumbItems.push({ label: parent.name, href: `/categories/${parent.slug}` });
+  }
+}
+breadcrumbItems.push({ label: category.name });
+---
+
+<Layout title={category.name} description={category.description}>
+  <Header slot="header" />
+  <div class="mx-auto max-w-5xl px-4 py-8">
+    <Breadcrumb items={breadcrumbItems} />
+
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold">{category.name}</h1>
+      {category.description && (
+        <p class="mt-2 text-gray-600">{category.description}</p>
+      )}
+    </div>
+
+    {childCategories.length > 0 && (
+      <div class="mb-6">
+        <h2 class="text-sm font-semibold text-gray-500 mb-2">サブカテゴリ</h2>
+        <div class="flex flex-wrap gap-2">
+          {childCategories.map((child) => (
+            <a
+              href={`/categories/${child.slug}`}
+              class="text-sm rounded-full px-3 py-1 border border-gray-300 text-gray-600 hover:border-gray-900 hover:text-gray-900 transition-colors"
+            >
+              {child.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <ArticleList articles={pageArticles} categories={allCategories} />
+    <Pagination currentPage={1} totalPages={totalPages} baseUrl={`/categories/${category.slug}`} />
+  </div>
+  <Footer slot="footer" />
+</Layout>

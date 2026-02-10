@@ -1,0 +1,24 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ArticleList from '../components/ArticleList.astro';
+import Pagination from '../components/Pagination.astro';
+import { getAllArticles, getAllCategories } from '../lib/data';
+
+const PAGE_SIZE = 10;
+const allArticles = await getAllArticles();
+const categories = await getAllCategories();
+const totalPages = Math.ceil(allArticles.length / PAGE_SIZE);
+const articles = allArticles.slice(0, PAGE_SIZE);
+---
+
+<Layout title="最新記事">
+  <Header slot="header" />
+  <div class="mx-auto max-w-5xl px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">最新記事</h1>
+    <ArticleList articles={articles} categories={categories} />
+    <Pagination currentPage={1} totalPages={totalPages} baseUrl="/" />
+  </div>
+  <Footer slot="footer" />
+</Layout>

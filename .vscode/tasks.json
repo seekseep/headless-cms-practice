@@ -1,0 +1,67 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "api: dev",
+      "type": "shell",
+      "command": "npx tsx watch src/dev.ts",
+      "options": {
+        "cwd": "${workspaceFolder}/packages/api"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "admin-ui: dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/packages/admin-ui"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "ui: dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/packages/ui"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "core: dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/packages/core"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "aws-service: dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/packages/aws-service"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "all: dev",
+      "dependsOn": [
+        "core: dev",
+        "aws-service: dev",
+        "api: dev",
+        "admin-ui: dev",
+        "ui: dev"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}

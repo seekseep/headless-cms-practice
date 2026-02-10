@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npx vite build:*)",
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:docs.astro.build)",
+      "Bash(xxd:*)",
+      "Bash(ACM_CERTIFICATE_ARN=arn:aws:acm:us-east-1:241531303063:certificate/875db37e-f249-477b-bcdb-cafed4b3da62 ACM_REGIONAL_CERTIFICATE_ARN=arn:aws:acm:ap-northeast-1:241531303063:certificate/01d21dd8-9e2e-4c41-9f68-c83381137b45 DOMAIN_NAME=headless-cms-practice.online CDK_DEFAULT_ACCOUNT=241531303063 CDK_DEFAULT_REGION=ap-northeast-1 npx cdk:*)",
+      "Bash(npx cdk bootstrap:*)",
+      "Bash(npx cdk synth:*)",
+      "Bash(xargs:*)",
+      "Bash(npx tsx:*)",
+      "Bash(git -C /Users/seekseep/Development/github.com/seekseep/headless-cms-practice config --get remote.origin.url)"
+    ]
+  }
+}

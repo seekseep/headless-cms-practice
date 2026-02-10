@@ -1,0 +1,25 @@
+---
+import type { Article, Category } from '../lib/types';
+import ArticleCard from './ArticleCard.astro';
+
+interface Props {
+  articles: Article[];
+  categories: Category[];
+}
+
+const { articles, categories } = Astro.props;
+
+function getCategoryForArticle(article: Article): Category | undefined {
+  return categories.find((c) => c.id === article.categoryId);
+}
+---
+
+{articles.length > 0 ? (
+  <div class="grid gap-4">
+    {articles.map((article) => (
+      <ArticleCard article={article} category={getCategoryForArticle(article)} />
+    ))}
+  </div>
+) : (
+  <p class="text-gray-500 text-center py-12">記事がありません</p>
+)}

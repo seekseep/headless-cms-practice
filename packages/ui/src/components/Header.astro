@@ -1,0 +1,38 @@
+---
+import { getRootCategories } from '../lib/data';
+
+const categories = await getRootCategories();
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b border-gray-200 bg-white">
+  <div class="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
+    <a href="/" class="text-xl font-bold text-gray-900 hover:text-gray-700">My Blog</a>
+    <nav class="flex items-center gap-6 text-sm">
+      <a href="/" class:list={['hover:text-gray-900', currentPath === '/' ? 'text-gray-900 font-semibold' : 'text-gray-600']}>
+        ホーム
+      </a>
+      <a href="/about" class:list={['hover:text-gray-900', currentPath === '/about' ? 'text-gray-900 font-semibold' : 'text-gray-600']}>
+        このサイトについて
+      </a>
+      <a href="/contact" class:list={['hover:text-gray-900', currentPath === '/contact' ? 'text-gray-900 font-semibold' : 'text-gray-600']}>
+        お問い合わせ
+      </a>
+    </nav>
+  </div>
+  <div class="mx-auto max-w-5xl px-4 pb-3 flex gap-3 overflow-x-auto text-sm">
+    {categories.map((cat) => (
+      <a
+        href={`/categories/${cat.slug}`}
+        class:list={[
+          'shrink-0 rounded-full px-3 py-1 border',
+          currentPath.startsWith(`/categories/${cat.slug}`)
+            ? 'bg-gray-900 text-white border-gray-900'
+            : 'text-gray-600 border-gray-300 hover:border-gray-900 hover:text-gray-900',
+        ]}
+      >
+        {cat.name}
+      </a>
+    ))}
+  </div>
+</header>

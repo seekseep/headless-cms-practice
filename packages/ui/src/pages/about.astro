@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+---
+
+<Layout title="このサイトについて" description="My Blog のサイト紹介ページです。">
+  <Header slot="header" />
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'このサイトについて' }]} />
+
+    <h1 class="text-2xl font-bold mb-6">このサイトについて</h1>
+
+    <div class="space-y-4 text-gray-700 leading-relaxed">
+      <p>
+        My Blog は、テクノロジー・ライフスタイル・ビジネスなど、幅広いトピックについて発信するブログサイトです。
+      </p>
+      <p>
+        最新の技術トレンドから日常生活に役立つ情報まで、読者の皆さまにとって価値のあるコンテンツをお届けすることを目指しています。
+      </p>
+      <h2 class="text-lg font-semibold pt-4">運営者について</h2>
+      <p>
+        Web開発に携わるエンジニアが個人で運営しています。フロントエンドからバックエンド、インフラまで幅広い技術領域に興味を持ち、学んだことをアウトプットしています。
+      </p>
+    </div>
+  </div>
+  <Footer slot="footer" />
+</Layout>

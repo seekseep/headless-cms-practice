@@ -1,0 +1,84 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/api/**'
+      - 'packages/core/**'
+      - 'packages/aws-service/**'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-api
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and Deploy API
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Build core (dependency of aws-service and api)
+      - name: Install core dependencies
+        uses: ./.github/actions/setup-node
+        with:
+          working-directory: packages/core
+
+      - name: Build core
+        working-directory: packages/core
+        run: npm run build
+
+      # Build aws-service (dependency of api, depends on core)
+      - name: Install aws-service dependencies
+        uses: ./.github/actions/setup-node
+        with:
+          working-directory: packages/aws-service
+
+      - name: Build aws-service
+        working-directory: packages/aws-service
+        run: npm run build
+
+      # Build api
+      - name: Install api dependencies
+        uses: ./.github/actions/setup-node
+        with:
+          working-directory: packages/api
+
+      - name: Build api
+        working-directory: packages/api
+        run: npm run build
+
+      # Fetch deploy configuration from CloudFormation
+      - name: Get API deploy environment
+        uses: ./.github/actions/get-stack-output
+        with:
+          stack-name: ApiStack
+          output-key: ApiDeployEnvironment
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Package and deploy
+      - name: Create deployment package
+        working-directory: packages/api
+        run: zip -j lambda.zip dist/index.js
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name "$FUNCTION_NAME" \
+            --zip-file fileb://packages/api/lambda.zip \
+            --region "${{ secrets.AWS_REGION }}" \
+            --publish

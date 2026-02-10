@@ -1,0 +1,9 @@
+{
+  "hosted-zone:account=241531303063:domainName=headless-cms-practice.online:region=ap-northeast-1": {
+    "Id": "/hostedzone/Z0581176SIH3CU42RDBF",
+    "Name": "headless-cms-practice.online."
+  },
+  "acknowledged-issue-numbers": [
+    34892
+  ]
+}

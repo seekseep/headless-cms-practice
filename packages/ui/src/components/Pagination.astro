@@ -1,0 +1,67 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string; // e.g. "/" or "/categories/tech"
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+function pageUrl(page: number): string {
+  if (page === 1) return baseUrl;
+  const base = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+  return `${base}page/${page}`;
+}
+
+const prevUrl = currentPage > 1 ? pageUrl(currentPage - 1) : null;
+const nextUrl = currentPage < totalPages ? pageUrl(currentPage + 1) : null;
+
+// Build page numbers with ellipsis
+function getPageNumbers(): (number | '...')[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+  const pages: (number | '...')[] = [1];
+  if (currentPage > 3) pages.push('...');
+  for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
+    pages.push(i);
+  }
+  if (currentPage < totalPages - 2) pages.push('...');
+  pages.push(totalPages);
+  return pages;
+}
+
+const pageNumbers = getPageNumbers();
+---
+
+{totalPages > 1 && (
+  <nav class="flex items-center justify-center gap-1 mt-8" aria-label="ページネーション">
+    {prevUrl ? (
+      <a href={prevUrl} class="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded">
+        &larr; 前へ
+      </a>
+    ) : (
+      <span class="px-3 py-2 text-sm text-gray-300">&larr; 前へ</span>
+    )}
+
+    {pageNumbers.map((p) =>
+      p === '...' ? (
+        <span class="px-2 py-2 text-sm text-gray-400">...</span>
+      ) : p === currentPage ? (
+        <span class="px-3 py-2 text-sm font-semibold text-white bg-gray-900 rounded">{p}</span>
+      ) : (
+        <a href={pageUrl(p)} class="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded">
+          {p}
+        </a>
+      )
+    )}
+
+    {nextUrl ? (
+      <a href={nextUrl} class="px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded">
+        次へ &rarr;
+      </a>
+    ) : (
+      <span class="px-3 py-2 text-sm text-gray-300">次へ &rarr;</span>
+    )}
+  </nav>
+)}

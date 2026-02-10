@@ -1,0 +1,69 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../../../../layouts/Layout.astro';
+import Header from '../../../../components/Header.astro';
+import Footer from '../../../../components/Footer.astro';
+import ArticleList from '../../../../components/ArticleList.astro';
+import Pagination from '../../../../components/Pagination.astro';
+import Breadcrumb from '../../../../components/Breadcrumb.astro';
+import {
+  getAllCategories,
+  getArticlesByCategory,
+  getCategoryById,
+} from '../../../../lib/data';
+
+export const getStaticPaths = (async () => {
+  const PAGE_SIZE = 10;
+  const categories = await getAllCategories();
+  const paths: { params: { slug: string; page: string }; props: any }[] = [];
+
+  for (const category of categories) {
+    const articles = await getArticlesByCategory(category.id);
+    const totalPages = Math.ceil(articles.length / PAGE_SIZE);
+
+    for (let pageNum = 2; pageNum <= totalPages; pageNum++) {
+      const start = (pageNum - 1) * PAGE_SIZE;
+      paths.push({
+        params: { slug: category.slug, page: String(pageNum) },
+        props: {
+          category,
+          articles: articles.slice(start, start + PAGE_SIZE),
+          currentPage: pageNum,
+          totalPages,
+        },
+      });
+    }
+  }
+
+  return paths;
+}) satisfies GetStaticPaths;
+
+const { category, articles, currentPage, totalPages } = Astro.props;
+const allCategories = await getAllCategories();
+
+const breadcrumbItems = [];
+if (category.parentId) {
+  const parent = await getCategoryById(category.parentId);
+  if (parent) {
+    breadcrumbItems.push({ label: parent.name, href: `/categories/${parent.slug}` });
+  }
+}
+breadcrumbItems.push({ label: category.name, href: `/categories/${category.slug}` });
+breadcrumbItems.push({ label: `ページ ${currentPage}` });
+---
+
+<Layout title={`${category.name} - ページ${currentPage}`} description={category.description}>
+  <Header slot="header" />
+  <div class="mx-auto max-w-5xl px-4 py-8">
+    <Breadcrumb items={breadcrumbItems} />
+
+    <h1 class="text-2xl font-bold mb-6">
+      {category.name}
+      <span class="text-base font-normal text-gray-500">ページ {currentPage}</span>
+    </h1>
+
+    <ArticleList articles={articles} categories={allCategories} />
+    <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl={`/categories/${category.slug}`} />
+  </div>
+  <Footer slot="footer" />
+</Layout>

@@ -1,0 +1,25 @@
+{
+  "name": "tool",
+  "version": "1.0.0",
+  "description": "CLI tool for operating AWS resources",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "verify-auth": "tsx src/index.ts verify-auth",
+    "set-role": "tsx src/index.ts set-role"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sts": "^3.985.0",
+    "@aws-sdk/credential-providers": "^3.985.0",
+    "@inquirer/prompts": "^7.5.3",
+    "aws-service": "file:../aws-service",
+    "commander": "^14.0.3",
+    "core": "file:../core",
+    "dotenv": "^17.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.8.3"
+  }
+}

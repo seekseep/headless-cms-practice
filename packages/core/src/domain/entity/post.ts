@@ -1,0 +1,19 @@
+import { z } from "zod";
+
+export const PostKeySchema = z.object({
+  id: z.string(),
+});
+
+export const PostValuesSchema = z.object({
+  title: z.string().min(1).max(100),
+  slug: z.string().min(1).max(100),
+  thumbnail: z.string().optional(),
+  content: z.string().max(500).optional(),
+  categoryId: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})
+
+export const PostSchema = PostKeySchema.extend(PostValuesSchema.shape);
+
+export type Post = z.infer<typeof PostSchema>;

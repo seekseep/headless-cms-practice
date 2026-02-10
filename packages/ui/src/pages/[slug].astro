@@ -1,0 +1,79 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getAllArticles, getCategoryById, getArticlesByCategory } from '../lib/data';
+
+export const getStaticPaths = (async () => {
+  const articles = await getAllArticles();
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}) satisfies GetStaticPaths;
+
+const { article } = Astro.props;
+const category = await getCategoryById(article.categoryId);
+const relatedArticles = (await getArticlesByCategory(article.categoryId))
+  .filter((a) => a.id !== article.id)
+  .slice(0, 3);
+
+const dateStr = article.createdAt.toLocaleDateString('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const breadcrumbItems = [];
+if (category) {
+  breadcrumbItems.push({ label: category.name, href: `/categories/${category.slug}` });
+}
+breadcrumbItems.push({ label: article.title });
+
+// 関連記事のカテゴリを事前取得
+const relatedCategories = await Promise.all(
+  relatedArticles.map((a) => getCategoryById(a.categoryId))
+);
+---
+
+<Layout title={article.title} description={article.content?.slice(0, 120)}>
+  <Header slot="header" />
+  <article class="mx-auto max-w-3xl px-4 py-8">
+    <Breadcrumb items={breadcrumbItems} />
+
+    <header class="mb-8">
+      <div class="flex items-center gap-3 mb-3">
+        {category && (
+          <a href={`/categories/${category.slug}`} class="text-sm text-blue-600 hover:text-blue-800">
+            {category.name}
+          </a>
+        )}
+        <time class="text-sm text-gray-400" datetime={article.createdAt.toISOString()}>
+          {dateStr}
+        </time>
+      </div>
+      <h1 class="text-3xl font-bold leading-tight">{article.title}</h1>
+    </header>
+
+    {article.content && (
+      <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed">
+        <p>{article.content}</p>
+      </div>
+    )}
+  </article>
+
+  {relatedArticles.length > 0 && (
+    <aside class="mx-auto max-w-3xl px-4 pb-8">
+      <h2 class="text-lg font-semibold mb-4 pt-8 border-t border-gray-200">関連記事</h2>
+      <div class="grid gap-4">
+        {relatedArticles.map((a, i) => (
+          <ArticleCard article={a} category={relatedCategories[i]} />
+        ))}
+      </div>
+    </aside>
+  )}
+  <Footer slot="footer" />
+</Layout>

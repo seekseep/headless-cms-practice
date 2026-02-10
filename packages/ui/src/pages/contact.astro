@@ -1,0 +1,63 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+---
+
+<Layout title="お問い合わせ" description="My Blog へのお問い合わせページです。">
+  <Header slot="header" />
+  <div class="mx-auto max-w-3xl px-4 py-8">
+    <Breadcrumb items={[{ label: 'お問い合わせ' }]} />
+
+    <h1 class="text-2xl font-bold mb-6">お問い合わせ</h1>
+
+    <p class="text-gray-600 mb-8">ご質問やご意見がありましたら、以下のフォームからお気軽にお問い合わせください。</p>
+
+    <form class="space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">お名前</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none"
+          placeholder="山田 太郎"
+        />
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">メールアドレス</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none"
+          placeholder="example@email.com"
+        />
+      </div>
+
+      <div>
+        <label for="message" class="block text-sm font-medium text-gray-700 mb-1">メッセージ</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="6"
+          required
+          class="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none resize-y"
+          placeholder="お問い合わせ内容をご記入ください"
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="rounded-lg bg-gray-900 px-6 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition-colors"
+      >
+        送信する
+      </button>
+    </form>
+  </div>
+  <Footer slot="footer" />
+</Layout>

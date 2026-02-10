@@ -1,0 +1,37 @@
+name: 'Get CloudFormation Stack Output'
+description: 'Fetch a JSON-encoded output from a CloudFormation stack and set as environment variables'
+inputs:
+  stack-name:
+    description: 'CloudFormation stack name'
+    required: true
+  output-key:
+    description: 'Output key to fetch'
+    required: true
+  aws-region:
+    description: 'AWS region'
+    required: true
+outputs:
+  json:
+    description: 'Raw JSON string from the stack output'
+    value: ${{ steps.fetch.outputs.json }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Fetch stack output
+      id: fetch
+      shell: bash
+      run: |
+        JSON=$(aws cloudformation describe-stacks \
+          --region "${{ inputs.aws-region }}" \
+          --stack-name "${{ inputs.stack-name }}" \
+          --query "Stacks[0].Outputs[?OutputKey=='${{ inputs.output-key }}'].OutputValue | [0]" \
+          --output text)
+
+        if [ "$JSON" = "None" ] || [ -z "$JSON" ]; then
+          echo "::error::Stack output '${{ inputs.output-key }}' not found in stack '${{ inputs.stack-name }}'"
+          exit 1
+        fi
+
+        echo "json=$JSON" >> "$GITHUB_OUTPUT"
+
+        echo "$JSON" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> "$GITHUB_ENV"

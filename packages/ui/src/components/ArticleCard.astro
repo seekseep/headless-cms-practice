@@ -1,0 +1,35 @@
+---
+import type { Article, Category } from '../lib/types';
+
+interface Props {
+  article: Article;
+  category?: Category;
+}
+
+const { article, category } = Astro.props;
+
+const dateStr = article.createdAt.toLocaleDateString('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+  <a href={`/${article.slug}`} class="block p-5">
+    <div class="flex items-center gap-2 mb-2">
+      {category && (
+        <span class="text-xs text-gray-500 bg-gray-100 rounded px-2 py-0.5">{category.name}</span>
+      )}
+      <time class="text-xs text-gray-400" datetime={article.createdAt.toISOString()}>
+        {dateStr}
+      </time>
+    </div>
+    <h2 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-snug">
+      {article.title}
+    </h2>
+    {article.content && (
+      <p class="mt-2 text-sm text-gray-600 line-clamp-2">{article.content}</p>
+    )}
+  </a>
+</article>
