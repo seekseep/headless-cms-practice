@@ -32,7 +32,7 @@ function ForgotPasswordPage() {
         search: { email },
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send reset code')
+      setError(err instanceof Error ? err.message : 'リセットコードの送信に失敗しました')
     } finally {
       setLoading(false)
     }
@@ -50,10 +50,10 @@ function ForgotPasswordPage() {
       >
         <Paper sx={{ p: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Forgot Password
+            パスワードをお忘れの方
           </Typography>
           <Typography variant="body2" align="center" sx={{ mb: 2 }}>
-            Enter your email to receive a password reset code.
+            パスワードリセットコードを受け取るメールアドレスを入力してください。
           </Typography>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -65,7 +65,7 @@ function ForgotPasswordPage() {
               margin="normal"
               required
               fullWidth
-              label="Email"
+              label="メールアドレス"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -79,11 +79,11 @@ function ForgotPasswordPage() {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? 'Sending...' : 'Send Reset Code'}
+              {loading ? '送信中...' : 'リセットコードを送信'}
             </Button>
             <Box sx={{ textAlign: 'center' }}>
               <Link to="/login" style={{ color: '#1976d2' }}>
-                Back to Login
+                ログインに戻る
               </Link>
             </Box>
           </Box>

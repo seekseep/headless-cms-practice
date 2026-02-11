@@ -35,7 +35,7 @@ function ChangeEmailPage() {
       setNewEmail('')
       await refreshAuth()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to change email')
+      setError(err instanceof Error ? err.message : 'メールアドレスの変更に失敗しました')
     } finally {
       setLoading(false)
     }
@@ -48,16 +48,16 @@ function ChangeEmailPage() {
         onClick={() => navigate({ to: '/me' })}
         sx={{ mb: 2 }}
       >
-        Back to Profile
+        プロフィールに戻る
       </Button>
 
       <Typography variant="h5" gutterBottom>
-        Change Email
+        メールアドレス変更
       </Typography>
 
       <Paper sx={{ p: 3, maxWidth: 500 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Current email: {userEmail}
+          現在のメールアドレス: {userEmail}
         </Typography>
 
         {error && (
@@ -67,8 +67,7 @@ function ChangeEmailPage() {
         )}
         {success && (
           <Alert severity="success" sx={{ mb: 2 }}>
-            Email update requested. Please check your new email for a
-            verification code.
+            メールアドレスの更新をリクエストしました。新しいメールアドレスに送信された確認コードをご確認ください。
           </Alert>
         )}
 
@@ -76,7 +75,7 @@ function ChangeEmailPage() {
           <TextField
             fullWidth
             required
-            label="New Email"
+            label="新しいメールアドレス"
             type="email"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
@@ -89,7 +88,7 @@ function ChangeEmailPage() {
             sx={{ mt: 2 }}
             disabled={loading}
           >
-            {loading ? 'Updating...' : 'Update Email'}
+            {loading ? '更新中...' : 'メールアドレスを更新'}
           </Button>
         </Box>
       </Paper>

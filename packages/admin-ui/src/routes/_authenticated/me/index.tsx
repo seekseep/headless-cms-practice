@@ -23,18 +23,18 @@ function ProfilePage() {
   return (
     <Box>
       <Typography variant="h5" gutterBottom>
-        Profile
+        プロフィール
       </Typography>
 
       <Paper sx={{ p: 3, mb: 3 }}>
         <Typography variant="subtitle2" color="text.secondary">
-          Email
+          メールアドレス
         </Typography>
         <Typography variant="body1">{userEmail}</Typography>
       </Paper>
 
       <Typography variant="h6" gutterBottom>
-        Settings
+        設定
       </Typography>
 
       <Paper>
@@ -53,8 +53,8 @@ function ProfilePage() {
                   <LockIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Change Password"
-                  secondary="Update your account password"
+                  primary="パスワード変更"
+                  secondary="アカウントのパスワードを変更します"
                 />
               </ListItemButton>
             </Link>
@@ -73,8 +73,8 @@ function ProfilePage() {
                   <EmailIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Change Email"
-                  secondary="Update your email address"
+                  primary="メールアドレス変更"
+                  secondary="メールアドレスを変更します"
                 />
               </ListItemButton>
             </Link>

@@ -28,7 +28,7 @@ function SignupPage() {
     setError('')
 
     if (password !== passwordConfirm) {
-      setError('Passwords do not match')
+      setError('パスワードが一致しません')
       return
     }
 
@@ -40,7 +40,7 @@ function SignupPage() {
         search: { email },
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign up failed')
+      setError(err instanceof Error ? err.message : '登録に失敗しました')
     } finally {
       setLoading(false)
     }
@@ -58,7 +58,7 @@ function SignupPage() {
       >
         <Paper sx={{ p: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Sign Up
+            新規登録
           </Typography>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -70,7 +70,7 @@ function SignupPage() {
               margin="normal"
               required
               fullWidth
-              label="Email"
+              label="メールアドレス"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -81,7 +81,7 @@ function SignupPage() {
               margin="normal"
               required
               fullWidth
-              label="Password"
+              label="パスワード"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -91,7 +91,7 @@ function SignupPage() {
               margin="normal"
               required
               fullWidth
-              label="Confirm Password"
+              label="パスワード（確認）"
               type="password"
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
@@ -104,11 +104,11 @@ function SignupPage() {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? 'Signing up...' : 'Sign Up'}
+              {loading ? '登録中...' : '新規登録'}
             </Button>
             <Box sx={{ textAlign: 'center' }}>
               <Link to="/login" style={{ color: '#1976d2' }}>
-                Already have an account? Login
+                アカウントをお持ちですか？ログイン
               </Link>
             </Box>
           </Box>

@@ -31,7 +31,7 @@ function LoginPage() {
       await login(email, password)
       navigate({ to: '/categories' })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed')
+      setError(err instanceof Error ? err.message : 'ログインに失敗しました')
     } finally {
       setLoading(false)
     }
@@ -49,7 +49,7 @@ function LoginPage() {
       >
         <Paper sx={{ p: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Login
+            ログイン
           </Typography>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -61,7 +61,7 @@ function LoginPage() {
               margin="normal"
               required
               fullWidth
-              label="Email"
+              label="メールアドレス"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -72,7 +72,7 @@ function LoginPage() {
               margin="normal"
               required
               fullWidth
-              label="Password"
+              label="パスワード"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -85,14 +85,14 @@ function LoginPage() {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? 'ログイン中...' : 'ログイン'}
             </Button>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
               <Link to="/forgot" style={{ color: '#1976d2' }}>
-                Forgot password?
+                パスワードをお忘れですか？
               </Link>
               <Link to="/signup" style={{ color: '#1976d2' }}>
-                Sign up
+                新規登録
               </Link>
             </Box>
           </Box>

@@ -83,7 +83,7 @@ function CategoryDetailPage() {
   }
 
   if (!category) {
-    return <Typography>Category not found</Typography>
+    return <Typography>カテゴリが見つかりません</Typography>
   }
 
   return (
@@ -93,31 +93,31 @@ function CategoryDetailPage() {
         onClick={() => navigate({ to: '/categories' })}
         sx={{ mb: 2 }}
       >
-        Back to Categories
+        カテゴリ一覧に戻る
       </Button>
 
       <Typography variant="h5" gutterBottom>
-        Edit Category
+        カテゴリ編集
       </Typography>
 
       <Paper sx={{ p: 3, mb: 4 }}>
         <TextField
           fullWidth
-          label="Name"
+          label="名前"
           value={name}
           onChange={(e) => setName(e.target.value)}
           margin="normal"
         />
         <TextField
           fullWidth
-          label="Slug"
+          label="スラッグ"
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
           margin="normal"
         />
         <TextField
           fullWidth
-          label="Description"
+          label="説明"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           margin="normal"
@@ -126,7 +126,7 @@ function CategoryDetailPage() {
         />
         <TextField
           fullWidth
-          label="Order"
+          label="順序"
           type="number"
           value={order}
           onChange={(e) => setOrder(Number(e.target.value))}
@@ -140,31 +140,31 @@ function CategoryDetailPage() {
             }
             disabled={updateMutation.isPending}
           >
-            {updateMutation.isPending ? 'Saving...' : 'Save'}
+            {updateMutation.isPending ? '保存中...' : '保存'}
           </Button>
           <Button
             variant="outlined"
             color="error"
             onClick={() => {
-              if (window.confirm('Are you sure you want to delete this category?')) {
+              if (window.confirm('このカテゴリを削除してもよろしいですか？')) {
                 deleteMutation.mutate()
               }
             }}
             disabled={deleteMutation.isPending}
           >
-            Delete
+            削除
           </Button>
         </Box>
         {updateMutation.isSuccess && (
           <Typography color="success.main" sx={{ mt: 1 }}>
-            Saved successfully
+            保存しました
           </Typography>
         )}
         {updateMutation.isError && (
           <Typography color="error" sx={{ mt: 1 }}>
             {updateMutation.error instanceof Error
               ? updateMutation.error.message
-              : 'Save failed'}
+              : '保存に失敗しました'}
           </Typography>
         )}
       </Paper>
@@ -179,14 +179,14 @@ function CategoryDetailPage() {
           mb: 2,
         }}
       >
-        <Typography variant="h6">Posts</Typography>
+        <Typography variant="h6">投稿</Typography>
         <Button
           variant="contained"
           size="small"
           startIcon={<AddIcon />}
           onClick={() => setCreatePostOpen(true)}
         >
-          New Post
+          新規投稿
         </Button>
       </Box>
 
@@ -194,16 +194,16 @@ function CategoryDetailPage() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Slug</TableCell>
-              <TableCell>Updated</TableCell>
+              <TableCell>タイトル</TableCell>
+              <TableCell>スラッグ</TableCell>
+              <TableCell>更新日</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {(!posts?.items || posts.items.length === 0) && (
               <TableRow>
                 <TableCell colSpan={3} align="center">
-                  No posts found
+                  投稿が見つかりません
                 </TableCell>
               </TableRow>
             )}
@@ -262,7 +262,7 @@ function CreatePostDialog({
       navigate({ to: '/posts/$id', params: { id: post.id } })
     },
     onError: (err) => {
-      setError(err instanceof Error ? err.message : 'Failed to create post')
+      setError(err instanceof Error ? err.message : '投稿の作成に失敗しました')
     },
   })
 
@@ -281,7 +281,7 @@ function CreatePostDialog({
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <Box component="form" onSubmit={handleSubmit}>
-        <DialogTitle>New Post</DialogTitle>
+        <DialogTitle>新規投稿</DialogTitle>
         <DialogContent>
           {error && (
             <Typography color="error" sx={{ mb: 1 }}>
@@ -292,7 +292,7 @@ function CreatePostDialog({
             margin="normal"
             required
             fullWidth
-            label="Title"
+            label="タイトル"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             autoFocus
@@ -301,15 +301,15 @@ function CreatePostDialog({
             margin="normal"
             required
             fullWidth
-            label="Slug"
+            label="スラッグ"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>キャンセル</Button>
           <Button type="submit" variant="contained" disabled={mutation.isPending}>
-            {mutation.isPending ? 'Creating...' : 'Create'}
+            {mutation.isPending ? '作成中...' : '作成'}
           </Button>
         </DialogActions>
       </Box>

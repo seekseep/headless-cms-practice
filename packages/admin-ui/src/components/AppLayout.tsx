@@ -31,7 +31,7 @@ export function AppLayout() {
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap>
-          CMS Admin
+          CMS 管理
         </Typography>
       </Toolbar>
       <Divider />
@@ -45,7 +45,7 @@ export function AppLayout() {
               <ListItemIcon>
                 <CategoryIcon />
               </ListItemIcon>
-              <ListItemText primary="Categories" />
+              <ListItemText primary="カテゴリ" />
             </ListItemButton>
           </Link>
         </ListItem>
@@ -61,7 +61,7 @@ export function AppLayout() {
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary="Profile" />
+              <ListItemText primary="プロフィール" />
             </ListItemButton>
           </Link>
         </ListItem>
@@ -70,7 +70,7 @@ export function AppLayout() {
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText primary="Logout" />
+            <ListItemText primary="ログアウト" />
           </ListItemButton>
         </ListItem>
       </List>
@@ -96,7 +96,7 @@ export function AppLayout() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-            CMS Admin
+            CMS 管理
           </Typography>
           <Typography variant="body2">{userEmail}</Typography>
         </Toolbar>

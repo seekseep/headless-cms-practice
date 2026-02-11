@@ -78,7 +78,7 @@ function PostDetailPage() {
   }
 
   if (!post) {
-    return <Typography>Post not found</Typography>
+    return <Typography>投稿が見つかりません</Typography>
   }
 
   return (
@@ -93,24 +93,24 @@ function PostDetailPage() {
         }
         sx={{ mb: 2 }}
       >
-        Back to Category
+        カテゴリに戻る
       </Button>
 
       <Typography variant="h5" gutterBottom>
-        Edit Post
+        投稿編集
       </Typography>
 
       <Paper sx={{ p: 3 }}>
         <TextField
           fullWidth
-          label="Title"
+          label="タイトル"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           margin="normal"
         />
         <TextField
           fullWidth
-          label="Slug"
+          label="スラッグ"
           value={slug}
           onChange={(e) => setSlug(e.target.value)}
           margin="normal"
@@ -118,7 +118,7 @@ function PostDetailPage() {
         <TextField
           fullWidth
           select
-          label="Category"
+          label="カテゴリ"
           value={categoryId}
           onChange={(e) => setCategoryId(e.target.value)}
           margin="normal"
@@ -131,7 +131,7 @@ function PostDetailPage() {
         </TextField>
         <TextField
           fullWidth
-          label="Content"
+          label="コンテンツ"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           margin="normal"
@@ -146,31 +146,31 @@ function PostDetailPage() {
             }
             disabled={updateMutation.isPending}
           >
-            {updateMutation.isPending ? 'Saving...' : 'Save'}
+            {updateMutation.isPending ? '保存中...' : '保存'}
           </Button>
           <Button
             variant="outlined"
             color="error"
             onClick={() => {
-              if (window.confirm('Are you sure you want to delete this post?')) {
+              if (window.confirm('この投稿を削除してもよろしいですか？')) {
                 deleteMutation.mutate()
               }
             }}
             disabled={deleteMutation.isPending}
           >
-            Delete
+            削除
           </Button>
         </Box>
         {updateMutation.isSuccess && (
           <Typography color="success.main" sx={{ mt: 1 }}>
-            Saved successfully
+            保存しました
           </Typography>
         )}
         {updateMutation.isError && (
           <Typography color="error" sx={{ mt: 1 }}>
             {updateMutation.error instanceof Error
               ? updateMutation.error.message
-              : 'Save failed'}
+              : '保存に失敗しました'}
           </Typography>
         )}
       </Paper>

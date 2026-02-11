@@ -45,13 +45,13 @@ function CategoriesPage() {
           mb: 3,
         }}
       >
-        <Typography variant="h5">Categories</Typography>
+        <Typography variant="h5">カテゴリ</Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setCreateOpen(true)}
         >
-          New Category
+          新規カテゴリ
         </Button>
       </Box>
 
@@ -64,17 +64,17 @@ function CategoriesPage() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Slug</TableCell>
-                <TableCell>Order</TableCell>
-                <TableCell>Description</TableCell>
+                <TableCell>名前</TableCell>
+                <TableCell>スラッグ</TableCell>
+                <TableCell>順序</TableCell>
+                <TableCell>説明</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {data?.items.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4} align="center">
-                    No categories found
+                    カテゴリが見つかりません
                   </TableCell>
                 </TableRow>
               )}
@@ -131,7 +131,7 @@ function CreateCategoryDialog({
       navigate({ to: '/categories/$id', params: { id: category.id } })
     },
     onError: (err) => {
-      setError(err instanceof Error ? err.message : 'Failed to create category')
+      setError(err instanceof Error ? err.message : 'カテゴリの作成に失敗しました')
     },
   })
 
@@ -158,7 +158,7 @@ function CreateCategoryDialog({
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <Box component="form" onSubmit={handleSubmit}>
-        <DialogTitle>New Category</DialogTitle>
+        <DialogTitle>新規カテゴリ</DialogTitle>
         <DialogContent>
           {error && (
             <Typography color="error" sx={{ mb: 1 }}>
@@ -169,7 +169,7 @@ function CreateCategoryDialog({
             margin="normal"
             required
             fullWidth
-            label="Name"
+            label="名前"
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
@@ -178,14 +178,14 @@ function CreateCategoryDialog({
             margin="normal"
             required
             fullWidth
-            label="Slug"
+            label="スラッグ"
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
           />
           <TextField
             margin="normal"
             fullWidth
-            label="Description"
+            label="説明"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             multiline
@@ -193,9 +193,9 @@ function CreateCategoryDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>キャンセル</Button>
           <Button type="submit" variant="contained" disabled={mutation.isPending}>
-            {mutation.isPending ? 'Creating...' : 'Create'}
+            {mutation.isPending ? '作成中...' : '作成'}
           </Button>
         </DialogActions>
       </Box>

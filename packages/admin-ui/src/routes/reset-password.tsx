@@ -37,7 +37,7 @@ function ResetPasswordPage() {
     setError('')
 
     if (newPassword !== newPasswordConfirm) {
-      setError('Passwords do not match')
+      setError('パスワードが一致しません')
       return
     }
 
@@ -46,7 +46,7 @@ function ResetPasswordPage() {
       await auth.confirmForgotPassword(email, code, newPassword)
       navigate({ to: '/login' })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Password reset failed')
+      setError(err instanceof Error ? err.message : 'パスワードのリセットに失敗しました')
     } finally {
       setLoading(false)
     }
@@ -64,10 +64,10 @@ function ResetPasswordPage() {
       >
         <Paper sx={{ p: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Reset Password
+            パスワードリセット
           </Typography>
           <Typography variant="body2" align="center" sx={{ mb: 2 }}>
-            Enter the code sent to your email and your new password.
+            メールに送信されたコードと新しいパスワードを入力してください。
           </Typography>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -79,7 +79,7 @@ function ResetPasswordPage() {
               margin="normal"
               required
               fullWidth
-              label="Email"
+              label="メールアドレス"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +89,7 @@ function ResetPasswordPage() {
               margin="normal"
               required
               fullWidth
-              label="Confirmation Code"
+              label="確認コード"
               value={code}
               onChange={(e) => setCode(e.target.value)}
               autoFocus={!!initialEmail}
@@ -98,7 +98,7 @@ function ResetPasswordPage() {
               margin="normal"
               required
               fullWidth
-              label="New Password"
+              label="新しいパスワード"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -108,7 +108,7 @@ function ResetPasswordPage() {
               margin="normal"
               required
               fullWidth
-              label="Confirm New Password"
+              label="新しいパスワード（確認）"
               type="password"
               value={newPasswordConfirm}
               onChange={(e) => setNewPasswordConfirm(e.target.value)}
@@ -121,7 +121,7 @@ function ResetPasswordPage() {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? 'Resetting...' : 'Reset Password'}
+              {loading ? 'リセット中...' : 'パスワードをリセット'}
             </Button>
           </Box>
         </Paper>

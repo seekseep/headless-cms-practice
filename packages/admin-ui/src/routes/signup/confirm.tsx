@@ -38,7 +38,7 @@ function ConfirmSignupPage() {
       await auth.confirmSignUp(email, code)
       navigate({ to: '/login' })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Confirmation failed')
+      setError(err instanceof Error ? err.message : '確認に失敗しました')
     } finally {
       setLoading(false)
     }
@@ -56,10 +56,10 @@ function ConfirmSignupPage() {
       >
         <Paper sx={{ p: 4, width: '100%' }}>
           <Typography component="h1" variant="h5" align="center" gutterBottom>
-            Confirm Sign Up
+            サインアップ確認
           </Typography>
           <Typography variant="body2" align="center" sx={{ mb: 2 }}>
-            Enter the confirmation code sent to your email.
+            メールに送信された確認コードを入力してください。
           </Typography>
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
@@ -71,7 +71,7 @@ function ConfirmSignupPage() {
               margin="normal"
               required
               fullWidth
-              label="Email"
+              label="メールアドレス"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -81,7 +81,7 @@ function ConfirmSignupPage() {
               margin="normal"
               required
               fullWidth
-              label="Confirmation Code"
+              label="確認コード"
               value={code}
               onChange={(e) => setCode(e.target.value)}
               autoFocus={!!initialEmail}
@@ -93,7 +93,7 @@ function ConfirmSignupPage() {
               sx={{ mt: 3, mb: 2 }}
               disabled={loading}
             >
-              {loading ? 'Confirming...' : 'Confirm'}
+              {loading ? '確認中...' : '確認'}
             </Button>
           </Box>
         </Paper>

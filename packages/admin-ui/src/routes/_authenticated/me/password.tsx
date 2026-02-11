@@ -30,7 +30,7 @@ function ChangePasswordPage() {
     setSuccess(false)
 
     if (newPassword !== newPasswordConfirm) {
-      setError('New passwords do not match')
+      setError('新しいパスワードが一致しません')
       return
     }
 
@@ -43,7 +43,7 @@ function ChangePasswordPage() {
       setNewPasswordConfirm('')
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to change password',
+        err instanceof Error ? err.message : 'パスワードの変更に失敗しました',
       )
     } finally {
       setLoading(false)
@@ -57,11 +57,11 @@ function ChangePasswordPage() {
         onClick={() => navigate({ to: '/me' })}
         sx={{ mb: 2 }}
       >
-        Back to Profile
+        プロフィールに戻る
       </Button>
 
       <Typography variant="h5" gutterBottom>
-        Change Password
+        パスワード変更
       </Typography>
 
       <Paper sx={{ p: 3, maxWidth: 500 }}>
@@ -72,14 +72,14 @@ function ChangePasswordPage() {
         )}
         {success && (
           <Alert severity="success" sx={{ mb: 2 }}>
-            Password changed successfully
+            パスワードを変更しました
           </Alert>
         )}
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
             fullWidth
             required
-            label="Current Password"
+            label="現在のパスワード"
             type="password"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
@@ -89,7 +89,7 @@ function ChangePasswordPage() {
           <TextField
             fullWidth
             required
-            label="New Password"
+            label="新しいパスワード"
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
@@ -99,7 +99,7 @@ function ChangePasswordPage() {
           <TextField
             fullWidth
             required
-            label="Confirm New Password"
+            label="新しいパスワード（確認）"
             type="password"
             value={newPasswordConfirm}
             onChange={(e) => setNewPasswordConfirm(e.target.value)}
@@ -112,7 +112,7 @@ function ChangePasswordPage() {
             sx={{ mt: 2 }}
             disabled={loading}
           >
-            {loading ? 'Changing...' : 'Change Password'}
+            {loading ? '変更中...' : 'パスワードを変更'}
           </Button>
         </Box>
       </Paper>
