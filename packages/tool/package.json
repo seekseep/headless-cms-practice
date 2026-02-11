@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "verify-auth": "tsx src/index.ts verify-auth",
-    "set-role": "tsx src/index.ts set-role"
+    "set-role": "tsx src/index.ts set-role",
+    "mock": "tsx src/index.ts mock"
   },
   "dependencies": {
     "@aws-sdk/client-sts": "^3.985.0",

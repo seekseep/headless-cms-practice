@@ -9,7 +9,7 @@ import {
 } from "@headless-cms-practice/aws-service";
 
 const tableConfig = { tableName: process.env.TABLE_NAME! };
-const userPoolConfig = { userPoolId: process.env.USER_POOL_ID!, region: process.env.AWS_REGION! };
+const userPoolConfig = { userPoolId: process.env.USER_POOL_ID!, clientId: process.env.USER_POOL_CLIENT_ID!, region: process.env.AWS_REGION! };
 
 export const findPostByIdQuery = makeFindPostByIdQuery(tableConfig);
 export const listPostsQuery = makeListPostsQuery(tableConfig);

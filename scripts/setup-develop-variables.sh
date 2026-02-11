@@ -63,6 +63,7 @@ echo "  ApiStack -> packages/api/.env"
 api_develop=$(get_stack_output "ApiStack" "ApiDevelopEnvironment")
 json_to_env "$api_develop" > "$ROOT_DIR/packages/api/.env"
 echo "PORT=${LOCAL_API_PORT}" >> "$ROOT_DIR/packages/api/.env"
+echo "CORS_ORIGIN=http://localhost:${LOCAL_ADMIN_UI_PORT},http://localhost:${LOCAL_UI_PORT}" >> "$ROOT_DIR/packages/api/.env"
 
 # UI package (override API_BASE_URL with local URL)
 echo "  UiStack -> packages/ui/.env"

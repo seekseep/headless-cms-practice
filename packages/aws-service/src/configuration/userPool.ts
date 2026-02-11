@@ -3,6 +3,7 @@ import { z } from "zod";
 
 export const UserPoolConfigurationSchema = z.object({
   userPoolId: z.string(),
+  clientId: z.string(),
   region: z.string(),
 });
 

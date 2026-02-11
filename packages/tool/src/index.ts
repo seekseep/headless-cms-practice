@@ -31,4 +31,13 @@ program
     await setRole({ profile, region });
   });
 
+program
+  .command("mock")
+  .description("Insert dummy data (categories and posts) into DynamoDB tables")
+  .action(async () => {
+    const { profile, region } = program.opts();
+    const { mock } = await import("@/cli");
+    await mock({ profile, region });
+  });
+
 program.parse();

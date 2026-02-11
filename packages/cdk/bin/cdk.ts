@@ -47,6 +47,7 @@ if (acmCertificateArn && acmRegionalCertificateArn && domainName) {
     categoriesTable: dataStack.categoriesTable,
     assetBucket: dataStack.assetBucket,
     userPool: authStack.userPool,
+    userPoolClient: authStack.userPoolClient,
     domainName,
     apiDomainName,
     certificateArn: acmRegionalCertificateArn,

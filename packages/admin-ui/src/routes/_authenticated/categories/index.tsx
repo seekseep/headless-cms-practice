@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow,
   CircularProgress,
+  Alert,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -20,7 +21,8 @@ import {
   TextField,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
-import { categoryApi, type Category } from '../../../lib/api'
+import type { CreateCategoryCommandInput } from '@headless-cms-practice/core'
+import { listCategories, createCategory } from '../../../lib/api'
 
 export const Route = createFileRoute('/_authenticated/categories/')({
   component: CategoriesPage,
@@ -30,10 +32,12 @@ function CategoriesPage() {
   const navigate = useNavigate()
   const [createOpen, setCreateOpen] = useState(false)
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['categories'],
-    queryFn: categoryApi.list,
+    queryFn: () => listCategories({ nextToken: null }),
   })
+
+  console.log({ data })
 
   return (
     <Box>
@@ -55,6 +59,12 @@ function CategoriesPage() {
         </Button>
       </Box>
 
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error instanceof Error ? error.message : 'カテゴリの取得に失敗しました'}
+        </Alert>
+      )}
+
       {isLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
@@ -73,8 +83,8 @@ function CategoriesPage() {
             <TableBody>
               {data?.items.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    カテゴリが見つかりません
+                  <TableCell colSpan={4} align="center" sx={{ py: 4, color: 'text.secondary' }}>
+                    カテゴリがありません
                   </TableCell>
                 </TableRow>
               )}
@@ -124,7 +134,7 @@ function CreateCategoryDialog({
   const [error, setError] = useState('')
 
   const mutation = useMutation({
-    mutationFn: (data: Omit<Category, 'id'>) => categoryApi.create(data),
+    mutationFn: (data: CreateCategoryCommandInput) => createCategory(data),
     onSuccess: (category) => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       handleClose()
@@ -161,9 +171,9 @@ function CreateCategoryDialog({
         <DialogTitle>新規カテゴリ</DialogTitle>
         <DialogContent>
           {error && (
-            <Typography color="error" sx={{ mb: 1 }}>
+            <Alert severity="error" sx={{ mb: 1 }}>
               {error}
-            </Typography>
+            </Alert>
           )}
           <TextField
             margin="normal"

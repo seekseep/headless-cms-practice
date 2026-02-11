@@ -8,6 +8,7 @@ import {
   Paper,
   TextField,
   CircularProgress,
+  Alert,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +23,8 @@ import {
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import AddIcon from '@mui/icons-material/Add'
-import { categoryApi, postApi, type Post } from '../../../lib/api'
+import type { UpdateCategoryCommandInput, CreatePostCommandInput } from '@headless-cms-practice/core'
+import { getCategory, updateCategory, deleteCategory, listPostsByCategoryId, createPost } from '../../../lib/api'
 
 export const Route = createFileRoute('/_authenticated/categories/$id')({
   component: CategoryDetailPage,
@@ -33,14 +35,14 @@ function CategoryDetailPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { data: category, isLoading } = useQuery({
+  const { data: category, isLoading, error: categoryError } = useQuery({
     queryKey: ['categories', id],
-    queryFn: () => categoryApi.get(id),
+    queryFn: () => getCategory({ id }),
   })
 
-  const { data: posts } = useQuery({
+  const { data: posts, error: postsError } = useQuery({
     queryKey: ['posts', { categoryId: id }],
-    queryFn: () => postApi.listByCategoryId(id),
+    queryFn: () => listPostsByCategoryId({ categoryId: id, nextToken: null }),
   })
 
   const [name, setName] = useState('')
@@ -59,15 +61,15 @@ function CategoryDetailPage() {
   }, [category])
 
   const updateMutation = useMutation({
-    mutationFn: (data: Parameters<typeof categoryApi.update>[1]) =>
-      categoryApi.update(id, data),
+    mutationFn: (data: Omit<UpdateCategoryCommandInput, 'id'>) =>
+      updateCategory({ id, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
     },
   })
 
   const deleteMutation = useMutation({
-    mutationFn: () => categoryApi.delete(id),
+    mutationFn: () => deleteCategory({ id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['categories'] })
       navigate({ to: '/categories' })
@@ -95,6 +97,12 @@ function CategoryDetailPage() {
       >
         カテゴリ一覧に戻る
       </Button>
+
+      {categoryError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {categoryError instanceof Error ? categoryError.message : 'カテゴリの取得に失敗しました'}
+        </Alert>
+      )}
 
       <Typography variant="h5" gutterBottom>
         カテゴリ編集
@@ -161,11 +169,11 @@ function CategoryDetailPage() {
           </Typography>
         )}
         {updateMutation.isError && (
-          <Typography color="error" sx={{ mt: 1 }}>
+          <Alert severity="error" sx={{ mt: 1 }}>
             {updateMutation.error instanceof Error
               ? updateMutation.error.message
               : '保存に失敗しました'}
-          </Typography>
+          </Alert>
         )}
       </Paper>
 
@@ -190,6 +198,12 @@ function CategoryDetailPage() {
         </Button>
       </Box>
 
+      {postsError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {postsError instanceof Error ? postsError.message : '投稿の取得に失敗しました'}
+        </Alert>
+      )}
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -202,8 +216,8 @@ function CategoryDetailPage() {
           <TableBody>
             {(!posts?.items || posts.items.length === 0) && (
               <TableRow>
-                <TableCell colSpan={3} align="center">
-                  投稿が見つかりません
+                <TableCell colSpan={3} align="center" sx={{ py: 4, color: 'text.secondary' }}>
+                  投稿がありません
                 </TableCell>
               </TableRow>
             )}
@@ -252,8 +266,8 @@ function CreatePostDialog({
   const [error, setError] = useState('')
 
   const mutation = useMutation({
-    mutationFn: (data: Omit<Post, 'id' | 'createdAt' | 'updatedAt'>) =>
-      postApi.create(data),
+    mutationFn: (data: CreatePostCommandInput) =>
+      createPost(data),
     onSuccess: (post) => {
       queryClient.invalidateQueries({
         queryKey: ['posts', { categoryId }],
@@ -275,7 +289,8 @@ function CreatePostDialog({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    mutation.mutate({ title, slug, categoryId })
+    const now = new Date()
+    mutation.mutate({ title, slug, categoryId, createdAt: now, updatedAt: now })
   }
 
   return (
@@ -284,9 +299,9 @@ function CreatePostDialog({
         <DialogTitle>新規投稿</DialogTitle>
         <DialogContent>
           {error && (
-            <Typography color="error" sx={{ mb: 1 }}>
+            <Alert severity="error" sx={{ mb: 1 }}>
               {error}
-            </Typography>
+            </Alert>
           )}
           <TextField
             margin="normal"

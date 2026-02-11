@@ -1,10 +1,9 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
+import { CssBaseline, ThemeProvider } from '@mui/material'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from '../lib/queryClient'
+import { theme } from '../lib/theme'
 import { AuthProvider } from '../contexts/AuthContext'
-
-const theme = createTheme()
 
 export const Route = createRootRoute({
   component: RootComponent,

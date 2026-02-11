@@ -16,6 +16,7 @@ export interface ApiStackProps extends cdk.StackProps {
   categoriesTable: dynamodb.Table;
   assetBucket: s3.Bucket;
   userPool: cognito.UserPool;
+  userPoolClient: cognito.UserPoolClient;
   domainName: string;
   apiDomainName: string;
   certificateArn: string;
@@ -40,6 +41,7 @@ export class ApiStack extends cdk.Stack {
         CATEGORIES_TABLE_NAME: props.categoriesTable.tableName,
         ASSET_BUCKET_NAME: props.assetBucket.bucketName,
         USER_POOL_ID: props.userPool.userPoolId,
+        USER_POOL_CLIENT_ID: props.userPoolClient.userPoolClientId,
       },
     });
 
@@ -100,6 +102,7 @@ export class ApiStack extends cdk.Stack {
         CATEGORIES_TABLE_NAME: props.categoriesTable.tableName,
         ASSET_BUCKET_NAME: props.assetBucket.bucketName,
         USER_POOL_ID: props.userPool.userPoolId,
+        USER_POOL_CLIENT_ID: props.userPoolClient.userPoolClientId,
         AWS_REGION: this.region,
       }),
     });

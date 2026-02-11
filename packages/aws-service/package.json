@@ -29,6 +29,7 @@
     "@aws-sdk/client-s3": "^3.985.0",
     "@aws-sdk/s3-request-presigner": "^3.985.0",
     "@headless-cms-practice/core": "*",
+    "aws-jwt-verify": "^5.1.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {

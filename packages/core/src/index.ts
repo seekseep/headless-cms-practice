@@ -20,3 +20,4 @@ export * from './application/usecase'
 
 // util
 export * from './util/result'
+export * from './util/logger'

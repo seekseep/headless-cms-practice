@@ -8,10 +8,12 @@ import {
   Paper,
   TextField,
   CircularProgress,
+  Alert,
   MenuItem,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { postApi, categoryApi } from '../../../lib/api'
+import type { UpdatePostCommandInput } from '@headless-cms-practice/core'
+import { getPost, updatePost, deletePost, listCategories } from '../../../lib/api'
 
 export const Route = createFileRoute('/_authenticated/posts/$id')({
   component: PostDetailPage,
@@ -22,14 +24,14 @@ function PostDetailPage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { data: post, isLoading } = useQuery({
+  const { data: post, isLoading, error: postError } = useQuery({
     queryKey: ['posts', id],
-    queryFn: () => postApi.get(id),
+    queryFn: () => getPost({ id }),
   })
 
-  const { data: categories } = useQuery({
+  const { data: categories, error: categoriesError } = useQuery({
     queryKey: ['categories'],
-    queryFn: categoryApi.list,
+    queryFn: () => listCategories({ nextToken: null }),
   })
 
   const [title, setTitle] = useState('')
@@ -47,15 +49,15 @@ function PostDetailPage() {
   }, [post])
 
   const updateMutation = useMutation({
-    mutationFn: (data: Parameters<typeof postApi.update>[1]) =>
-      postApi.update(id, data),
+    mutationFn: (data: Omit<UpdatePostCommandInput, 'id'>) =>
+      updatePost({ id, ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
   })
 
   const deleteMutation = useMutation({
-    mutationFn: () => postApi.delete(id),
+    mutationFn: () => deletePost({ id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
       if (post?.categoryId) {
@@ -95,6 +97,17 @@ function PostDetailPage() {
       >
         カテゴリに戻る
       </Button>
+
+      {postError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {postError instanceof Error ? postError.message : '投稿の取得に失敗しました'}
+        </Alert>
+      )}
+      {categoriesError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {categoriesError instanceof Error ? categoriesError.message : 'カテゴリの取得に失敗しました'}
+        </Alert>
+      )}
 
       <Typography variant="h5" gutterBottom>
         投稿編集
@@ -167,11 +180,11 @@ function PostDetailPage() {
           </Typography>
         )}
         {updateMutation.isError && (
-          <Typography color="error" sx={{ mt: 1 }}>
+          <Alert severity="error" sx={{ mt: 1 }}>
             {updateMutation.error instanceof Error
               ? updateMutation.error.message
               : '保存に失敗しました'}
-          </Typography>
+          </Alert>
         )}
       </Paper>
     </Box>
