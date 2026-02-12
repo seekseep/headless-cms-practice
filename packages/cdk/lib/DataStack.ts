@@ -27,11 +27,19 @@ export class DataStack extends cdk.Stack {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
+    this.postsTable.addGlobalSecondaryIndex({
+      indexName: 'CategoryIdIndex',
+      partitionKey: { name: 'categoryId', type: dynamodb.AttributeType.STRING },
+    });
 
     this.categoriesTable = new dynamodb.Table(this, 'CategoriesTable', {
       partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+    this.categoriesTable.addGlobalSecondaryIndex({
+      indexName: 'ParentIdIndex',
+      partitionKey: { name: 'parentId', type: dynamodb.AttributeType.STRING },
     });
 
     this.assetBucket = new s3.Bucket(this, 'AssetBucket', {

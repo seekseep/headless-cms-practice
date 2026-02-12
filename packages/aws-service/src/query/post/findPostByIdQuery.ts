@@ -12,7 +12,7 @@ export function makeFindPostByIdQuery (tableOperationConfiguration: TableOperati
     try {
       const { Item } = await client.send(new GetItemCommand({
         TableName: tableName,
-        Key: { PK: { S: `POST#${input.id}` }, SK: { S: `POST#${input.id}` } },
+        Key: { id: { S: input.id } },
       }));
 
       if (!Item) {

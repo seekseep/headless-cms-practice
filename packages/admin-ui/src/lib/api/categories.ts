@@ -1,6 +1,7 @@
 import type {
   ListAllCategoriesQueryInput,
   FindCategoryByIdQueryInput,
+  ListCategoriesByParentIdQueryInput,
   CreateCategoryCommandInput,
   UpdateCategoryCommandInput,
 } from '@headless-cms-practice/core'
@@ -42,4 +43,13 @@ export async function deleteCategory(
   input: FindCategoryByIdQueryInput,
 ): Promise<void> {
   await client.delete(`/categories/${input.id}`)
+}
+
+export async function listCategoriesByParentId(
+  input: ListCategoriesByParentIdQueryInput,
+): Promise<ListResponse<Category>> {
+  const res = await client.get(`/categories/${input.parentId}/children`, {
+    params: { nextToken: input.nextToken },
+  })
+  return res.data
 }

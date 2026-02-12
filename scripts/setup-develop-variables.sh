@@ -56,20 +56,40 @@ LOCAL_API_URL="http://localhost:${LOCAL_API_PORT}"
 LOCAL_UI_PORT=4321
 LOCAL_ADMIN_UI_PORT=5173
 
+SSM_API_KEY_NAME="/headless-cms/api-key"
+
+get_ssm_parameter() {
+  local name="$1"
+  aws ssm get-parameter \
+    $AWS_OPTS \
+    --name "$name" \
+    --with-decryption \
+    --query "Parameter.Value" \
+    --output text
+}
+
 echo "Fetching stack outputs..."
+
+# Fetch API_KEY from SSM
+echo "  SSM ${SSM_API_KEY_NAME} -> API_KEY"
+API_KEY=$(get_ssm_parameter "$SSM_API_KEY_NAME")
 
 # API package
 echo "  ApiStack -> packages/api/.env"
 api_develop=$(get_stack_output "ApiStack" "ApiDevelopEnvironment")
 json_to_env "$api_develop" > "$ROOT_DIR/packages/api/.env"
+echo "AWS_REGION=${REGION}" >> "$ROOT_DIR/packages/api/.env"
+echo "AWS_PROFILE=${PROFILE}" >> "$ROOT_DIR/packages/api/.env"
 echo "PORT=${LOCAL_API_PORT}" >> "$ROOT_DIR/packages/api/.env"
 echo "CORS_ORIGIN=http://localhost:${LOCAL_ADMIN_UI_PORT},http://localhost:${LOCAL_UI_PORT}" >> "$ROOT_DIR/packages/api/.env"
+echo "API_KEY=${API_KEY}" >> "$ROOT_DIR/packages/api/.env"
 
 # UI package (override API_BASE_URL with local URL)
 echo "  UiStack -> packages/ui/.env"
 ui_develop=$(get_stack_output "UiStack" "UiDevelopEnvironment")
 json_to_env "$ui_develop" > "$ROOT_DIR/packages/ui/.env"
 sed -i '' "s|^API_BASE_URL=.*|API_BASE_URL=${LOCAL_API_URL}|" "$ROOT_DIR/packages/ui/.env"
+echo "API_KEY=${API_KEY}" >> "$ROOT_DIR/packages/ui/.env"
 echo "PORT=${LOCAL_UI_PORT}" >> "$ROOT_DIR/packages/ui/.env"
 
 # Admin UI package (override VITE_API_BASE_URL with local URL)
@@ -86,5 +106,6 @@ data_tool=$(get_stack_output "DataStack" "ToolEnvironment")
 json_to_env "$auth_tool" > "$ROOT_DIR/packages/tool/.env"
 json_to_env "$data_tool" >> "$ROOT_DIR/packages/tool/.env"
 echo "AWS_REGION=${REGION}" >> "$ROOT_DIR/packages/tool/.env"
+echo "AWS_PROFILE=${PROFILE}" >> "$ROOT_DIR/packages/tool/.env"
 
 echo "Done!"

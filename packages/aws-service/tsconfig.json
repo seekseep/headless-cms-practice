@@ -16,5 +16,5 @@
       "core": ["../core/src"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "../../.vscode/command"]
 }

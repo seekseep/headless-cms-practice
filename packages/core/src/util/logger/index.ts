@@ -17,6 +17,13 @@ const LOG_LEVELS: Record<LogLevel, number> = {
 export function createLogger(name: string, level: LogLevel = "debug"): Logger {
   const minLevel = LOG_LEVELS[level];
 
+  function serialize(data: unknown): string {
+    if (data instanceof Error) {
+      return JSON.stringify({ name: data.name, message: data.message, stack: data.stack }, null, 2);
+    }
+    return JSON.stringify(data, null, 2);
+  }
+
   function log(logLevel: LogLevel, message: string, data?: unknown) {
     if (LOG_LEVELS[logLevel] < minLevel) return;
 
@@ -24,7 +31,7 @@ export function createLogger(name: string, level: LogLevel = "debug"): Logger {
     const prefix = `[${timestamp}] [${logLevel.toUpperCase()}] [${name}]`;
 
     if (data !== undefined) {
-      console[logLevel === "debug" ? "log" : logLevel](`${prefix} ${message}`, JSON.stringify(data, null, 2));
+      console[logLevel === "debug" ? "log" : logLevel](`${prefix} ${message}`, serialize(data));
     } else {
       console[logLevel === "debug" ? "log" : logLevel](`${prefix} ${message}`);
     }

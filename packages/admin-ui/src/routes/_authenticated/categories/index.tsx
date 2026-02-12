@@ -203,7 +203,7 @@ function CreateCategoryDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>キャンセル</Button>
+          <Button variant="text" onClick={handleClose}>キャンセル</Button>
           <Button type="submit" variant="contained" disabled={mutation.isPending}>
             {mutation.isPending ? '作成中...' : '作成'}
           </Button>

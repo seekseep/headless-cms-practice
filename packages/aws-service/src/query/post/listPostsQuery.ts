@@ -1,5 +1,5 @@
 import { ListPostsQuery, succeed, failAsInternalError } from "@headless-cms-practice/core";
-import { QueryCommand } from "@aws-sdk/client-dynamodb";
+import { ScanCommand } from "@aws-sdk/client-dynamodb";
 import { TableOperationConfiguration } from "@/configuration";
 import { createDynamoDBClient, encodeNextToken, decodeNextToken } from "@/util/dynamodb";
 import { convertItemToPost } from "@/converter/post";
@@ -10,14 +10,8 @@ export function makeListPostsQuery (tableOperationConfiguration: TableOperationC
 
   return async function listPostsQuery (input) {
     try {
-      const { Items, LastEvaluatedKey } = await client.send(new QueryCommand({
+      const { Items, LastEvaluatedKey } = await client.send(new ScanCommand({
         TableName: tableName,
-        IndexName: "entityType-entitySort-index",
-        KeyConditionExpression: "entityType = :et",
-        ExpressionAttributeValues: {
-          ":et": { S: "POST" },
-        },
-        ScanIndexForward: false,
         ExclusiveStartKey: decodeNextToken(input.nextToken),
       }));
 

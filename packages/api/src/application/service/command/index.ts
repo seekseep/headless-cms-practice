@@ -8,13 +8,14 @@ import {
   makeCreateUploadUrlCommand,
 } from "@headless-cms-practice/aws-service";
 
-const tableConfig = { tableName: process.env.TABLE_NAME! };
-const backetConfig = { backetName: process.env.BACKET_NAME! };
+const postsTableConfig = { tableName: process.env.POSTS_TABLE_NAME! };
+const categoriesTableConfig = { tableName: process.env.CATEGORIES_TABLE_NAME! };
+const bucketConfig = { backetName: process.env.ASSET_BUCKET_NAME! };
 
-export const createPostCommand = makeCreatePostCommand(tableConfig);
-export const updatePostCommand = makeUpdatePostCommand(tableConfig);
-export const deletePostCommand = makeDeletePostCommand(tableConfig);
-export const createCategoryCommand = makeCreateCategoryCommand(tableConfig);
-export const updateCategoryCommand = makeUpdateCategoryCommand(tableConfig);
-export const deleteCategoryAndChildrenCommand = makeDeleteCategoryAndChildrenCommand(tableConfig);
-export const createUploadUrlCommand = makeCreateUploadUrlCommand(backetConfig);
+export const createPostCommand = makeCreatePostCommand(postsTableConfig);
+export const updatePostCommand = makeUpdatePostCommand(postsTableConfig);
+export const deletePostCommand = makeDeletePostCommand(postsTableConfig);
+export const createCategoryCommand = makeCreateCategoryCommand(categoriesTableConfig);
+export const updateCategoryCommand = makeUpdateCategoryCommand(categoriesTableConfig);
+export const deleteCategoryAndChildrenCommand = makeDeleteCategoryAndChildrenCommand(categoriesTableConfig);
+export const createUploadUrlCommand = makeCreateUploadUrlCommand(bucketConfig);

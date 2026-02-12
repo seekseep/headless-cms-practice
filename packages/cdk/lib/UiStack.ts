@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as route53 from 'aws-cdk-lib/aws-route53';
@@ -54,16 +55,21 @@ export class UiStack extends cdk.Stack {
       ),
     });
 
+    const apiKey = ssm.StringParameter.valueForStringParameter(
+      this,
+      '/headless-cms/api-key',
+    );
+
     new cdk.CfnOutput(this, 'UiBuildEnvironment', {
-      value: JSON.stringify({
-        API_BASE_URL: `https://${props.apiDomainName}`,
-      }),
+      value: cdk.Fn.join('', [
+        '{"API_BASE_URL":"https://', props.apiDomainName, '","API_KEY":"', apiKey, '"}',
+      ]),
     });
 
     new cdk.CfnOutput(this, 'UiDevelopEnvironment', {
-      value: JSON.stringify({
-        API_BASE_URL: `https://${props.apiDomainName}`,
-      }),
+      value: cdk.Fn.join('', [
+        '{"API_BASE_URL":"https://', props.apiDomainName, '","API_KEY":"', apiKey, '"}',
+      ]),
     });
 
     new cdk.CfnOutput(this, 'UiDeployEnvironment', {

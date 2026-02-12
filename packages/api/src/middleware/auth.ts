@@ -11,6 +11,15 @@ export type AuthEnv = {
 };
 
 export const authMiddleware = createMiddleware<AuthEnv>(async (c, next) => {
+  // API キー認証
+  const apiKey = c.req.header("X-Api-Key");
+  const configuredApiKey = process.env.API_KEY;
+  if (apiKey && configuredApiKey && apiKey === configuredApiKey) {
+    logger.info("Authenticated via API key");
+    c.set("user", { id: "system", role: "admin" });
+    return next();
+  }
+
   const authorization = c.req.header("Authorization");
   logger.debug("Authorization header", { authorization: authorization ?? null });
 

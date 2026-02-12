@@ -10,8 +10,8 @@ export const PostValuesSchema = z.object({
   thumbnail: z.string().optional(),
   content: z.string().max(500).optional(),
   categoryId: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
 })
 
 export const PostSchema = PostKeySchema.extend(PostValuesSchema.shape);

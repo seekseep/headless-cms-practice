@@ -12,12 +12,11 @@ export function makeListPostsByCategoryIdQuery (tableOperationConfiguration: Tab
     try {
       const { Items, LastEvaluatedKey } = await client.send(new QueryCommand({
         TableName: tableName,
-        IndexName: "relationType-relationSort-index",
-        KeyConditionExpression: "relationType = :rt",
+        IndexName: "CategoryIdIndex",
+        KeyConditionExpression: "categoryId = :cid",
         ExpressionAttributeValues: {
-          ":rt": { S: `POST_CATEGORY#${input.categoryId}` },
+          ":cid": { S: input.categoryId },
         },
-        ScanIndexForward: false,
         ExclusiveStartKey: decodeNextToken(input.nextToken),
       }));
 

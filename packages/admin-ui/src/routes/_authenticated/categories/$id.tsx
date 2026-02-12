@@ -23,8 +23,8 @@ import {
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import AddIcon from '@mui/icons-material/Add'
-import type { UpdateCategoryCommandInput, CreatePostCommandInput } from '@headless-cms-practice/core'
-import { getCategory, updateCategory, deleteCategory, listPostsByCategoryId, createPost } from '../../../lib/api'
+import type { UpdateCategoryCommandInput, CreatePostCommandInput, CreateCategoryCommandInput } from '@headless-cms-practice/core'
+import { getCategory, updateCategory, deleteCategory, listPostsByCategoryId, createPost, listCategoriesByParentId, createCategory } from '../../../lib/api'
 
 export const Route = createFileRoute('/_authenticated/categories/$id')({
   component: CategoryDetailPage,
@@ -40,6 +40,11 @@ function CategoryDetailPage() {
     queryFn: () => getCategory({ id }),
   })
 
+  const { data: childCategories, error: childCategoriesError } = useQuery({
+    queryKey: ['categories', { parentId: id }],
+    queryFn: () => listCategoriesByParentId({ parentId: id, nextToken: null }),
+  })
+
   const { data: posts, error: postsError } = useQuery({
     queryKey: ['posts', { categoryId: id }],
     queryFn: () => listPostsByCategoryId({ categoryId: id, nextToken: null }),
@@ -50,6 +55,7 @@ function CategoryDetailPage() {
   const [description, setDescription] = useState('')
   const [order, setOrder] = useState(0)
   const [createPostOpen, setCreatePostOpen] = useState(false)
+  const [createSubcategoryOpen, setCreateSubcategoryOpen] = useState(false)
 
   useEffect(() => {
     if (category) {
@@ -91,6 +97,7 @@ function CategoryDetailPage() {
   return (
     <Box>
       <Button
+        variant="text"
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate({ to: '/categories' })}
         sx={{ mb: 2 }}
@@ -187,6 +194,76 @@ function CategoryDetailPage() {
           mb: 2,
         }}
       >
+        <Typography variant="h6">サブカテゴリ</Typography>
+        <Button
+          variant="contained"
+          size="small"
+          startIcon={<AddIcon />}
+          onClick={() => setCreateSubcategoryOpen(true)}
+        >
+          新規サブカテゴリ
+        </Button>
+      </Box>
+
+      {childCategoriesError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {childCategoriesError instanceof Error ? childCategoriesError.message : 'サブカテゴリの取得に失敗しました'}
+        </Alert>
+      )}
+
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>名前</TableCell>
+              <TableCell>スラッグ</TableCell>
+              <TableCell>順序</TableCell>
+              <TableCell>説明</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(!childCategories?.items || childCategories.items.length === 0) && (
+              <TableRow>
+                <TableCell colSpan={4} align="center" sx={{ py: 4, color: 'text.secondary' }}>
+                  サブカテゴリがありません
+                </TableCell>
+              </TableRow>
+            )}
+            {childCategories?.items.map((child) => (
+              <TableRow
+                key={child.id}
+                hover
+                sx={{ cursor: 'pointer' }}
+                onClick={() =>
+                  navigate({ to: '/categories/$id', params: { id: child.id } })
+                }
+              >
+                <TableCell>{child.name}</TableCell>
+                <TableCell>{child.slug}</TableCell>
+                <TableCell>{child.order}</TableCell>
+                <TableCell>{child.description}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <CreateSubcategoryDialog
+        parentId={id}
+        open={createSubcategoryOpen}
+        onClose={() => setCreateSubcategoryOpen(false)}
+      />
+
+      <Divider sx={{ my: 3 }} />
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
+        }}
+      >
         <Typography variant="h6">投稿</Typography>
         <Button
           variant="contained"
@@ -247,6 +324,102 @@ function CategoryDetailPage() {
         onClose={() => setCreatePostOpen(false)}
       />
     </Box>
+  )
+}
+
+function CreateSubcategoryDialog({
+  parentId,
+  open,
+  onClose,
+}: {
+  parentId: string
+  open: boolean
+  onClose: () => void
+}) {
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const [name, setName] = useState('')
+  const [slug, setSlug] = useState('')
+  const [description, setDescription] = useState('')
+  const [error, setError] = useState('')
+
+  const mutation = useMutation({
+    mutationFn: (data: CreateCategoryCommandInput) => createCategory(data),
+    onSuccess: (category) => {
+      queryClient.invalidateQueries({ queryKey: ['categories', { parentId }] })
+      handleClose()
+      navigate({ to: '/categories/$id', params: { id: category.id } })
+    },
+    onError: (err) => {
+      setError(err instanceof Error ? err.message : 'サブカテゴリの作成に失敗しました')
+    },
+  })
+
+  const handleClose = () => {
+    setName('')
+    setSlug('')
+    setDescription('')
+    setError('')
+    onClose()
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    mutation.mutate({
+      name,
+      slug,
+      description,
+      parentId,
+      thumbnail: null,
+      order: 0,
+    })
+  }
+
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      <Box component="form" onSubmit={handleSubmit}>
+        <DialogTitle>新規サブカテゴリ</DialogTitle>
+        <DialogContent>
+          {error && (
+            <Alert severity="error" sx={{ mb: 1 }}>
+              {error}
+            </Alert>
+          )}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="名前"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="スラッグ"
+            value={slug}
+            onChange={(e) => setSlug(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            label="説明"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            multiline
+            rows={3}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="text" onClick={handleClose}>キャンセル</Button>
+          <Button type="submit" variant="contained" disabled={mutation.isPending}>
+            {mutation.isPending ? '作成中...' : '作成'}
+          </Button>
+        </DialogActions>
+      </Box>
+    </Dialog>
   )
 }
 
@@ -322,7 +495,7 @@ function CreatePostDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>キャンセル</Button>
+          <Button variant="text" onClick={handleClose}>キャンセル</Button>
           <Button type="submit" variant="contained" disabled={mutation.isPending}>
             {mutation.isPending ? '作成中...' : '作成'}
           </Button>

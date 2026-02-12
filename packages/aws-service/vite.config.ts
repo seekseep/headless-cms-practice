@@ -16,7 +16,12 @@ export default defineConfig({
       formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: ["core"],
+      external: [
+        "core",
+        /^@aws-sdk\//,
+        /^@smithy\//,
+        "aws-jwt-verify",
+      ],
     },
   },
   plugins: [

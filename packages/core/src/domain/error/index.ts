@@ -1,6 +1,7 @@
 export type InternalError = {
   name: 'InternalError'
   message: string
+  cause?: unknown
 }
 
 export type NotFoundError = {
@@ -11,6 +12,7 @@ export type NotFoundError = {
 export type ExternalServiceError = {
   name: 'ExternalServiceError'
   message: string
+  cause?: unknown
 }
 
 export type ValidationError = {

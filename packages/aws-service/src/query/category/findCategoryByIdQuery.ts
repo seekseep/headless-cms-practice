@@ -12,7 +12,7 @@ export function makeFindCategoryByIdQuery (tableOperationConfiguration: TableOpe
     try {
       const { Item } = await client.send(new GetItemCommand({
         TableName: tableName,
-        Key: { PK: { S: `CATEGORY#${input.id}` }, SK: { S: `CATEGORY#${input.id}` } },
+        Key: { id: { S: input.id } },
       }));
 
       if (!Item) {

@@ -30,10 +30,12 @@
     "@aws-sdk/s3-request-presigner": "^3.985.0",
     "@headless-cms-practice/core": "*",
     "aws-jwt-verify": "^5.1.1",
+    "uuid": "^11.1.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
+    "@types/uuid": "^9.0.8",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.4"

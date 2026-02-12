@@ -10,10 +10,11 @@ export function failAsNotFound(message?: string) {
   })
 }
 
-export function failAsInternalError(message?: string) {
+export function failAsInternalError(message?: string, cause?: unknown) {
   return fail({
     name: 'InternalError' as const,
-    message: message ?? 'Internal server error'
+    message: message ?? 'Internal server error',
+    cause,
   })
 }
 

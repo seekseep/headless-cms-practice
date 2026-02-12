@@ -1,7 +1,9 @@
 import { AttributeValue, DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 export function createDynamoDBClient (): DynamoDBClient {
-  return new DynamoDBClient({});
+  return new DynamoDBClient({
+    region: process.env.AWS_REGION,
+  });
 }
 
 export function encodeNextToken (lastEvaluatedKey: Record<string, AttributeValue> | undefined): string | null {
