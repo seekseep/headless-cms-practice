@@ -50,6 +50,7 @@ if (acmCertificateArn && acmRegionalCertificateArn && domainName) {
     userPoolClient: authStack.userPoolClient,
     domainName,
     apiDomainName,
+    assetsDomainName,
     certificateArn: acmRegionalCertificateArn,
   });
   apiStack.addDependency(authStack);

@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import { marked } from 'marked';
 import { getAllArticles, getCategoryById, getArticlesByCategory } from '../lib/data';
 
 export const getStaticPaths = (async () => {
@@ -33,6 +34,8 @@ if (category) {
 }
 breadcrumbItems.push({ label: article.title });
 
+const contentHtml = article.content ? await marked(article.content) : '';
+
 // 関連記事のカテゴリを事前取得
 const relatedCategories = await Promise.all(
   relatedArticles.map((a) => getCategoryById(a.categoryId))
@@ -58,10 +61,8 @@ const relatedCategories = await Promise.all(
       <h1 class="text-3xl font-bold leading-tight">{article.title}</h1>
     </header>
 
-    {article.content && (
-      <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed">
-        <p>{article.content}</p>
-      </div>
+    {contentHtml && (
+      <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed" set:html={contentHtml} />
     )}
   </article>
 

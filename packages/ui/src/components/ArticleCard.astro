@@ -1,5 +1,6 @@
 ---
 import type { Article, Category } from '../lib/types';
+import { extractFirstParagraphText } from '../lib/markdown';
 
 interface Props {
   article: Article;
@@ -13,6 +14,8 @@ const dateStr = article.createdAt.toLocaleDateString('ja-JP', {
   month: 'long',
   day: 'numeric',
 });
+
+const excerpt = article.content ? extractFirstParagraphText(article.content) : '';
 ---
 
 <article class="group border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
@@ -28,8 +31,8 @@ const dateStr = article.createdAt.toLocaleDateString('ja-JP', {
     <h2 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-snug">
       {article.title}
     </h2>
-    {article.content && (
-      <p class="mt-2 text-sm text-gray-600 line-clamp-2">{article.content}</p>
+    {excerpt && (
+      <p class="mt-2 text-sm text-gray-600 line-clamp-2">{excerpt}</p>
     )}
   </a>
 </article>

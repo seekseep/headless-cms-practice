@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   Box,
@@ -10,10 +10,15 @@ import {
   CircularProgress,
   Alert,
   MenuItem,
+  Tabs,
+  Tab,
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ImageIcon from '@mui/icons-material/Image'
+import MarkdownEditor from '../../../components/MarkdownEditor'
+import MarkdownPreview from '../../../components/MarkdownPreview'
 import type { UpdatePostCommandInput } from '@headless-cms-practice/core'
-import { getPost, updatePost, deletePost, listCategories } from '../../../lib/api'
+import { getPost, updatePost, deletePost, listCategories, createUploadUrl } from '../../../lib/api'
 
 export const Route = createFileRoute('/_authenticated/posts/$id')({
   component: PostDetailPage,
@@ -38,6 +43,36 @@ function PostDetailPage() {
   const [slug, setSlug] = useState('')
   const [content, setContent] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [editorTab, setEditorTab] = useState<0 | 1>(0)
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = useCallback(async (file: File) => {
+    setUploading(true)
+    setUploadError(null)
+    try {
+      const { uploadUrl, url } = await createUploadUrl({ contentType: file.type })
+      await fetch(uploadUrl, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type },
+      })
+      setContent((prev) => prev + `\n![${file.name}](${url})\n`)
+    } catch {
+      setUploadError('画像のアップロードに失敗しました')
+    } finally {
+      setUploading(false)
+    }
+  }, [])
+
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      handleImageUpload(file)
+    }
+    e.target.value = ''
+  }, [handleImageUpload])
 
   useEffect(() => {
     if (post) {
@@ -142,15 +177,50 @@ function PostDetailPage() {
             </MenuItem>
           ))}
         </TextField>
-        <TextField
-          fullWidth
-          label="コンテンツ"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          margin="normal"
-          multiline
-          rows={10}
-        />
+        <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
+          コンテンツ
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Tabs
+            value={editorTab}
+            onChange={(_, v) => setEditorTab(v)}
+            sx={{ mb: 1 }}
+          >
+            <Tab label="編集" />
+            <Tab label="プレビュー" />
+          </Tabs>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={handleFileSelect}
+          />
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={uploading ? <CircularProgress size={16} /> : <ImageIcon />}
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            sx={{ mb: 1 }}
+          >
+            {uploading ? 'アップロード中...' : '画像を挿入'}
+          </Button>
+        </Box>
+        {uploadError && (
+          <Alert severity="error" sx={{ mb: 1 }} onClose={() => setUploadError(null)}>
+            {uploadError}
+          </Alert>
+        )}
+        {editorTab === 0 ? (
+          <MarkdownEditor
+            value={content}
+            onChange={setContent}
+            placeholder="Markdownで入力..."
+          />
+        ) : (
+          <MarkdownPreview content={content} />
+        )}
         <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
           <Button
             variant="contained"

@@ -20,6 +20,7 @@ export interface ApiStackProps extends cdk.StackProps {
   userPoolClient: cognito.UserPoolClient;
   domainName: string;
   apiDomainName: string;
+  assetsDomainName: string;
   certificateArn: string;
 }
 
@@ -46,6 +47,7 @@ export class ApiStack extends cdk.Stack {
         POSTS_TABLE_NAME: props.postsTable.tableName,
         CATEGORIES_TABLE_NAME: props.categoriesTable.tableName,
         ASSET_BUCKET_NAME: props.assetBucket.bucketName,
+        ASSET_BASE_URL: `https://${props.assetsDomainName}`,
         USER_POOL_ID: props.userPool.userPoolId,
         USER_POOL_CLIENT_ID: props.userPoolClient.userPoolClientId,
         API_KEY: apiKey,
@@ -108,6 +110,7 @@ export class ApiStack extends cdk.Stack {
         POSTS_TABLE_NAME: props.postsTable.tableName,
         CATEGORIES_TABLE_NAME: props.categoriesTable.tableName,
         ASSET_BUCKET_NAME: props.assetBucket.bucketName,
+        ASSET_BASE_URL: `https://${props.assetsDomainName}`,
         USER_POOL_ID: props.userPool.userPoolId,
         USER_POOL_CLIENT_ID: props.userPoolClient.userPoolClientId,
         AWS_REGION: this.region,

@@ -10,7 +10,7 @@ import {
 
 const postsTableConfig = { tableName: process.env.POSTS_TABLE_NAME! };
 const categoriesTableConfig = { tableName: process.env.CATEGORIES_TABLE_NAME! };
-const bucketConfig = { backetName: process.env.ASSET_BUCKET_NAME! };
+const bucketConfig = { backetName: process.env.ASSET_BUCKET_NAME!, assetBaseUrl: process.env.ASSET_BASE_URL! };
 
 export const createPostCommand = makeCreatePostCommand(postsTableConfig);
 export const updatePostCommand = makeUpdatePostCommand(postsTableConfig);

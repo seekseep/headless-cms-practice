@@ -1,8 +1,8 @@
-import { CategoryKeySchema } from "@/domain/entity/category";
+import { PostKeySchema } from "@/domain/entity/post";
 import { AppResult } from "@/domain/util/appResult";
 import { z } from "zod";
 
-export const DeletePostCommandParametersSchema = CategoryKeySchema
+export const DeletePostCommandParametersSchema = PostKeySchema
 
 export type DeletePostCommandInput = z.input<typeof DeletePostCommandParametersSchema>;
 export type DeletePostCommandParameters = z.infer<typeof DeletePostCommandParametersSchema>;

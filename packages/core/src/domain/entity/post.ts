@@ -8,7 +8,7 @@ export const PostValuesSchema = z.object({
   title: z.string().min(1).max(100),
   slug: z.string().min(1).max(100),
   thumbnail: z.string().optional(),
-  content: z.string().max(500).optional(),
+  content: z.string().max(100000).optional(),
   categoryId: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
