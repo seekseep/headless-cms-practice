@@ -7,6 +7,7 @@ on:
       - 'packages/api/**'
       - 'packages/core/**'
       - 'packages/aws-service/**'
+      - '.github/workflows/deploy-api.yml'
   workflow_dispatch:
   workflow_call:
     secrets:

@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'packages/admin-ui/**'
+      - '.github/workflows/deploy-admin-ui.yml'
   workflow_dispatch:
   workflow_call:
     secrets:

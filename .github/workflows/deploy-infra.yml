@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'packages/cdk/**'
+      - '.github/workflows/deploy-infra.yml'
   workflow_dispatch:
 
 permissions:
