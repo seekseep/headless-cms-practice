@@ -54,3 +54,24 @@ jobs:
           ACM_CERTIFICATE_ARN: ${{ secrets.ACM_CERTIFICATE_ARN }}
           ACM_REGIONAL_CERTIFICATE_ARN: ${{ secrets.ACM_REGIONAL_CERTIFICATE_ARN }}
           DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+
+  deploy-api:
+    needs: deploy
+    uses: ./.github/workflows/deploy-api.yml
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+  deploy-ui:
+    needs: deploy
+    uses: ./.github/workflows/deploy-ui.yml
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+  deploy-admin-ui:
+    needs: deploy
+    uses: ./.github/workflows/deploy-admin-ui.yml
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}

@@ -8,6 +8,12 @@ on:
       - 'packages/core/**'
       - 'packages/aws-service/**'
   workflow_dispatch:
+  workflow_call:
+    secrets:
+      AWS_ROLE_ARN:
+        required: true
+      AWS_REGION:
+        required: true
 
 permissions:
   id-token: write
