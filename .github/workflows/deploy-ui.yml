@@ -50,6 +50,12 @@ jobs:
           output-key: UiBuildEnvironment
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Write .env for Astro build
+        working-directory: packages/ui
+        run: |
+          echo "API_BASE_URL=$API_BASE_URL" > .env
+          echo "API_KEY=$API_KEY" >> .env
+
       - name: Build UI
         working-directory: packages/ui
         run: npm run build
