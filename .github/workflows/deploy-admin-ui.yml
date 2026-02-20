@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'packages/admin-ui/**'
+      - 'packages/core/**'
       - '.github/workflows/deploy-admin-ui.yml'
   workflow_dispatch:
   workflow_call:
@@ -36,6 +37,16 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      # Build core (dependency of admin-ui)
+      - name: Install core dependencies
+        uses: ./.github/actions/setup-node
+        with:
+          working-directory: packages/core
+
+      - name: Build core
+        working-directory: packages/core
+        run: npm run build
 
       - name: Install Admin UI dependencies
         uses: ./.github/actions/setup-node
