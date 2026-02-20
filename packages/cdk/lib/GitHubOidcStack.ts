@@ -60,10 +60,14 @@ export class GitHubOidcStack extends cdk.Stack {
       }),
     );
 
-    // Lambda UpdateFunctionCode (for API deploy)
+    // Lambda (for API deploy — code update + environment configuration)
     role.addToPolicy(
       new iam.PolicyStatement({
-        actions: ['lambda:UpdateFunctionCode'],
+        actions: [
+          'lambda:UpdateFunctionCode',
+          'lambda:GetFunctionConfiguration',
+          'lambda:UpdateFunctionConfiguration',
+        ],
         resources: [
           `arn:aws:lambda:${this.region}:${this.account}:function:*`,
         ],
@@ -82,6 +86,16 @@ export class GitHubOidcStack extends cdk.Stack {
         resources: [
           `arn:aws:s3:::*`,
           `arn:aws:s3:::*/*`,
+        ],
+      }),
+    );
+
+    // SSM GetParameter (for API and UI deploy — fetch API key)
+    role.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ['ssm:GetParameter'],
+        resources: [
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/headless-cms/api-key`,
         ],
       }),
     );

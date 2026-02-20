@@ -4,7 +4,6 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as ssm from 'aws-cdk-lib/aws-ssm';
 import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
 import * as apigatewayv2Integrations from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import * as route53 from 'aws-cdk-lib/aws-route53';
@@ -30,11 +29,6 @@ export class ApiStack extends cdk.Stack {
 
     const apiDomainName = props.apiDomainName;
 
-    const apiKey = ssm.StringParameter.valueForStringParameter(
-      this,
-      '/headless-cms/api-key',
-    );
-
     const fn = new lambda.Function(this, 'ApiFunction', {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
@@ -50,7 +44,6 @@ export class ApiStack extends cdk.Stack {
         ASSET_BASE_URL: `https://${props.assetsDomainName}`,
         USER_POOL_ID: props.userPool.userPoolId,
         USER_POOL_CLIENT_ID: props.userPoolClient.userPoolClientId,
-        API_KEY: apiKey,
       },
     });
 
