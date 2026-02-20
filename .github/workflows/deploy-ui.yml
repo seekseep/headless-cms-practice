@@ -50,6 +50,16 @@ jobs:
           output-key: UiBuildEnvironment
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Get API key from SSM
+        run: |
+          API_KEY=$(aws ssm get-parameter \
+            --name /headless-cms/api-key \
+            --region ${{ secrets.AWS_REGION }} \
+            --query Parameter.Value \
+            --output text)
+          echo "::add-mask::$API_KEY"
+          echo "API_KEY=$API_KEY" >> "$GITHUB_ENV"
+
       - name: Write .env for Astro build
         working-directory: packages/ui
         run: |

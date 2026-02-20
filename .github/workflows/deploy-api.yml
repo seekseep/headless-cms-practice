@@ -89,3 +89,24 @@ jobs:
             --zip-file fileb://packages/api/lambda.zip \
             --region "${{ secrets.AWS_REGION }}" \
             --publish
+          aws lambda wait function-updated \
+            --function-name "$FUNCTION_NAME" \
+            --region "${{ secrets.AWS_REGION }}"
+
+      - name: Set API key in Lambda environment
+        run: |
+          API_KEY=$(aws ssm get-parameter \
+            --name /headless-cms/api-key \
+            --with-decryption \
+            --region "${{ secrets.AWS_REGION }}" \
+            --query Parameter.Value \
+            --output text)
+          CURRENT_ENV=$(aws lambda get-function-configuration \
+            --function-name "$FUNCTION_NAME" \
+            --region "${{ secrets.AWS_REGION }}" \
+            --query Environment.Variables)
+          NEW_ENV=$(echo "$CURRENT_ENV" | jq --arg key "$API_KEY" '. + {API_KEY: $key}')
+          aws lambda update-function-configuration \
+            --function-name "$FUNCTION_NAME" \
+            --environment "{\"Variables\": $NEW_ENV}" \
+            --region "${{ secrets.AWS_REGION }}"
