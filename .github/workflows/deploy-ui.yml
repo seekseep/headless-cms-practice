@@ -54,6 +54,7 @@ jobs:
         run: |
           API_KEY=$(aws ssm get-parameter \
             --name /headless-cms/api-key \
+            --with-decryption \
             --region ${{ secrets.AWS_REGION }} \
             --query Parameter.Value \
             --output text)
